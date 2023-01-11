@@ -2,8 +2,9 @@ import { type NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
 import { signIn, signOut, useSession } from "next-auth/react";
-
 import { api } from "../utils/api";
+import { string } from "zod";
+import { useState } from "react";
 
 const Home: NextPage = () => {
   const hello = api.example.hello.useQuery({ text: "from tRPC" });
@@ -20,34 +21,10 @@ const Home: NextPage = () => {
           <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
             Create <span className="text-[hsl(280,100%,70%)]">T3</span> App
           </h1>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-8">
-            <Link
-              className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20"
-              href="https://create.t3.gg/en/usage/first-steps"
-              target="_blank"
-            >
-              <h3 className="text-2xl font-bold">First Steps →</h3>
-              <div className="text-lg">
-                Just the basics - Everything you need to know to set up your
-                database and authentication.
-              </div>
-            </Link>
-            <Link
-              className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20"
-              href="https://create.t3.gg/en/introduction"
-              target="_blank"
-            >
-              <h3 className="text-2xl font-bold">Documentation →</h3>
-              <div className="text-lg">
-                Learn more about Create T3 App, the libraries it uses, and how
-                to deploy it.
-              </div>
-            </Link>
-          </div>
+          <LinkAdd />
+          <LinkList />
           <div className="flex flex-col items-center gap-2">
-            <p className="text-2xl text-white">
-              {hello.data ? hello.data.greeting : "Loading tRPC query..."}
-            </p>
+            <p className="text-2xl text-white">{hello.data ? hello.data.greeting : "Loading tRPC query..."}</p>
             <AuthShowcase />
           </div>
         </div>
@@ -58,12 +35,89 @@ const Home: NextPage = () => {
 
 export default Home;
 
+const LinkAdd: React.FC = () => {
+  const { data: sessionData } = useSession();
+
+  type FormLink = {
+    slug: string;
+    url: string;
+  };
+
+  const [formLink, setFormLink] = useState<FormLink>({ slug: "", url: "" });
+
+  const mutation = api.link.add.useMutation();
+
+  return (
+    <div className="flex flex-wrap gap-4">
+      <input
+        className="flex-[0_0_150px] p-2"
+        type="text"
+        onChange={(e) => {
+          setFormLink({
+            ...formLink,
+            slug: e.target.value,
+          });
+        }}
+        value={formLink.slug}
+        placeholder="Slug"
+      />
+      <input
+        className="flex-[1_0_200px] p-2"
+        type="text"
+        onChange={(e) => {
+          setFormLink({
+            ...formLink,
+            url: e.target.value,
+          });
+        }}
+        value={formLink.url}
+        placeholder="Url"
+      />
+      <button
+        className="flex-[1_0_100px] bg-black p-4 text-white hover:bg-gray-900"
+        onClick={(e) => {
+          e.preventDefault();
+          mutation.mutate({ slug: formLink.slug, url: formLink.url, userId: sessionData?.user?.id });
+          setFormLink({ slug: "", url: "" });
+        }}
+      >
+        Create
+      </button>
+    </div>
+  );
+};
+
+const LinkList: React.FC = () => {
+  const { data: sessionData } = useSession();
+  const { data: linkList } = api.link.getFromUser.useQuery(
+    {
+      user: sessionData?.user?.id,
+    },
+    { enabled: sessionData?.user !== undefined }
+  );
+
+  return (
+    <div className="grid grid-cols-1 items-center justify-center gap-6 rounded bg-white p-4 text-black">
+      <h2 className="py-2 px-8 text-4xl font-bold">Your links</h2>
+      {linkList?.map((link) => (
+        <div className="border p-3 text-xl shadow hover:bg-gray-100" key={link.slug}>
+          <p>Name: {link.slug}</p>
+          <p>Url: {link.url}</p>
+          <Link className="mt-3 block border bg-slate-200 p-3 text-center hover:bg-slate-300" href={link.url}>
+            Go to Link
+          </Link>
+        </div>
+      ))}
+    </div>
+  );
+};
+
 const AuthShowcase: React.FC = () => {
   const { data: sessionData } = useSession();
 
   const { data: secretMessage } = api.example.getSecretMessage.useQuery(
     undefined, // no input
-    { enabled: sessionData?.user !== undefined },
+    { enabled: sessionData?.user !== undefined }
   );
 
   return (
