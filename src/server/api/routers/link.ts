@@ -1,23 +1,20 @@
-import { createTRPCRouter, publicProcedure, protectedProcedure } from "../trpc";
+import { createTRPCRouter, publicProcedure, userProcedure, adminProcedure } from "../trpc";
 import { z } from "zod";
 
 export const linkRouter = createTRPCRouter({
-  getAll: protectedProcedure.query(({ ctx }) => {
-    return ctx.prisma.sLink.findMany();
-  }),
-
-  get: publicProcedure.input(z.object({ slug: z.string() })).query(({ ctx, input }) => {
-    return ctx.prisma.sLink.findFirst({
+  // PUBLIC PROCEDURES -------------------------------- //
+  check: publicProcedure.input(z.object({ slug: z.string() })).query(({ ctx, input }) => {
+    return ctx.prisma.sLink.count({
       where: {
         slug: input.slug,
       },
     });
   }),
 
-  getFromUser: publicProcedure.input(z.object({ user: z.string() })).query(({ ctx, input }) => {
-    return ctx.prisma.sLink.findMany({
+  get: publicProcedure.input(z.object({ slug: z.string() })).query(({ ctx, input }) => {
+    return ctx.prisma.sLink.findFirst({
       where: {
-        userId: input.user,
+        slug: input.slug,
       },
     });
   }),
@@ -36,4 +33,20 @@ export const linkRouter = createTRPCRouter({
       });
       return post;
     }),
+
+  // USER PROCEDURES -------------------------------- //
+
+  getFromUser: userProcedure.input(z.object({ user: z.string() })).query(({ ctx, input }) => {
+    return ctx.prisma.sLink.findMany({
+      where: {
+        userId: input.user,
+      },
+    });
+  }),
+
+  // ADMIN PROCEDURES -------------------------------- //
+
+  getAll: adminProcedure.query(({ ctx }) => {
+    return ctx.prisma.sLink.findMany();
+  }),
 });
