@@ -1,38 +1,30 @@
 import { signIn, signOut, useSession } from "next-auth/react";
 import Link from "next/link";
+// import { api } from "../../utils/api";
 
 const AuthBar: React.FC = () => {
   const { data: sessionData } = useSession();
 
   return (
-    <nav className="flex h-16 w-full items-center justify-between gap-4 bg-slate-900 px-20">
-      <p className="text-center text-xl text-white">{sessionData && <span>{sessionData.user?.email}</span>}</p>
+    <div className="flex flex-wrap items-center justify-end h-16 gap-16 bg-slate-900">
+      <p className="text-lg text-center text-white">{sessionData ? <span>{sessionData.user?.email}</span> : ""}</p>
       {sessionData ? (
-        <div className="flex justify-end gap-4 ">
-          <Link
-            className="rounded-full border border-white px-6 py-2 font-semibold text-white no-underline transition hover:bg-white/20"
-            href="/settigns"
-          >
+        <div className="flex items-center justify-end gap-4 text-sm">
+          <Link className="px-6 py-3 font-semibold text-center text-white no-underline transition border border-white rounded-full hover:bg-white/20" href="/settigns">
             Settings
           </Link>
-          <button
-            className="rounded-full border border-white px-6 py-2 font-semibold text-white no-underline transition hover:bg-white/20"
-            onClick={() => signOut()}
-          >
-            Sign out
+          <button className="px-6 py-3 font-semibold text-center text-white no-underline transition border border-white rounded-full hover:bg-white/20" onClick={() => signOut()}>
+            Logout
           </button>
         </div>
       ) : (
         <div>
-          <button
-            className="rounded-full border border-white px-6 py-2 font-semibold text-white no-underline transition hover:bg-white/20"
-            onClick={() => signIn()}
-          >
-            Sign in
+          <button className="px-6 py-3 font-semibold text-center text-white no-underline transition border border-white rounded-full hover:bg-white/20" onClick={() => signIn()}>
+            Login
           </button>
         </div>
       )}
-    </nav>
+    </div>
   );
 };
 
