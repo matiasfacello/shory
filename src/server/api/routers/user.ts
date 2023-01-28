@@ -1,12 +1,12 @@
-import { createTRPCRouter, publicProcedure } from "../trpc";
+import { adminProcedure, createTRPCRouter, publicProcedure } from "../trpc";
 import { z } from "zod";
 
 export const userRouter = createTRPCRouter({
   // PUBLIC PROCEDURES -------------------------------- //
-  check: publicProcedure.input(z.object({ slug: z.string() })).query(({ ctx, input }) => {
-    return ctx.prisma.sLink.count({
+  check: publicProcedure.input(z.object({ email: z.string() })).query(({ ctx, input }) => {
+    return ctx.prisma.user.count({
       where: {
-        slug: input.slug,
+        email: input.email,
       },
     });
   }),
@@ -31,4 +31,7 @@ export const userRouter = createTRPCRouter({
   // USER PROCEDURES -------------------------------- //
 
   // ADMIN PROCEDURES -------------------------------- //
+  // adminTest: adminProcedure.query(() => {
+  //   return "User is Admin";
+  // }),
 });

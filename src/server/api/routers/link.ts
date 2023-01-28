@@ -1,4 +1,4 @@
-import { createTRPCRouter, publicProcedure, userProcedure, adminProcedure } from "../trpc";
+import { createTRPCRouter, publicProcedure, userProcedure /*adminProcedure*/ } from "../trpc";
 import { z } from "zod";
 
 export const linkRouter = createTRPCRouter({
@@ -19,21 +19,6 @@ export const linkRouter = createTRPCRouter({
     });
   }),
 
-  add: publicProcedure
-    .input(
-      z.object({
-        userId: z.string().optional(),
-        slug: z.string().min(1).max(32),
-        url: z.string().min(1),
-      })
-    )
-    .mutation(async ({ ctx, input }) => {
-      const post = await ctx.prisma.sLink.create({
-        data: input,
-      });
-      return post;
-    }),
-
   // USER PROCEDURES -------------------------------- //
 
   getFromUser: userProcedure.input(z.object({ user: z.string() })).query(({ ctx, input }) => {
@@ -41,12 +26,78 @@ export const linkRouter = createTRPCRouter({
       where: {
         userId: input.user,
       },
+      orderBy: {
+        slug: "asc",
+      },
     });
+  }),
+
+  add: userProcedure
+    .input(
+      z.object({
+        slug: z.string().min(1).max(32),
+        url: z.string().min(1),
+        userId: z.string().optional(),
+        utm_source: z.string().optional(),
+        utm_campaign: z.string().optional(),
+        utm_medium: z.string().optional(),
+        utm_term: z.string().optional(),
+        utm_content: z.string().optional(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const link = await ctx.prisma.sLink.create({
+        data: input,
+      });
+      return link;
+    }),
+
+  update: userProcedure
+    .input(
+      z.object({
+        id: z.number(),
+        slug: z.string(),
+        url: z.string(),
+        utm_source: z.string(),
+        utm_campaign: z.string(),
+        utm_medium: z.string(),
+        utm_term: z.string(),
+        utm_content: z.string(),
+        userId: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const link = await ctx.prisma.sLink.updateMany({
+        where: {
+          id: input.id,
+          userId: input.userId,
+        },
+        data: {
+          slug: input.slug,
+          url: input.url,
+          utm_source: input.utm_source,
+          utm_campaign: input.utm_campaign,
+          utm_medium: input.utm_medium,
+          utm_term: input.utm_term,
+          utm_content: input.utm_content,
+        },
+      });
+      return link;
+    }),
+
+  delete: userProcedure.input(z.object({ slug: z.string(), user: z.string() })).mutation(async ({ ctx, input }) => {
+    const link = await ctx.prisma.sLink.deleteMany({
+      where: {
+        slug: input.slug,
+        userId: input.user,
+      },
+    });
+    return link;
   }),
 
   // ADMIN PROCEDURES -------------------------------- //
 
-  getAll: adminProcedure.query(({ ctx }) => {
-    return ctx.prisma.sLink.findMany();
-  }),
+  // getAll: adminProcedure.query(({ ctx }) => {
+  //   return ctx.prisma.sLink.findMany();
+  // }),
 });
