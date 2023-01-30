@@ -3,6 +3,8 @@ import { useState } from "react";
 import { api } from "../../utils/api";
 import type { FormEvent } from "react";
 import Label from "./atom/Label";
+import { Icon } from "@iconify-icon/react";
+import { rndString } from "../general/atoms/rndString";
 
 const LinkAdd: React.FC = () => {
   const { data: sessionData } = useSession();
@@ -19,6 +21,8 @@ const LinkAdd: React.FC = () => {
   };
 
   const [formLink, setFormLink] = useState<FormLink>({ slug: "", url: "", utm_source: "", utm_campaign: "", utm_medium: "", utm_term: "", utm_content: "" });
+
+  const [formError, setFormError] = useState("");
 
   const utils = api.useContext();
 
@@ -66,7 +70,12 @@ const LinkAdd: React.FC = () => {
   };
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    setFormError("");
     event.preventDefault();
+    if (formLink.slug.length < 6) {
+      setFormError("Slug is too short");
+      return;
+    }
     mutation.mutate({
       slug: formLink.slug,
       url: formLink.url,
@@ -80,6 +89,11 @@ const LinkAdd: React.FC = () => {
     setFormLink({ slug: "", url: "", utm_source: "", utm_campaign: "", utm_medium: "", utm_term: "", utm_content: "" });
   };
 
+  const generateSlug = () => {
+    const random = rndString(6);
+    setFormLink({ ...formLink, slug: random });
+  };
+
   return (
     <>
       <form
@@ -91,13 +105,16 @@ const LinkAdd: React.FC = () => {
         <div className="flex flex-wrap justify-center gap-4 px-4">
           <div className="flex flex-[1_1_200px] flex-col">
             <Label for="slug" name="Slug" className="text-white" />
-
-            <input className="p-2" type="text" name="slug" onChange={handleChangeSlug} value={formLink.slug} placeholder="Slug" required />
+            <div className="flex items-center">
+              <input className="flex-[1_1_200px] p-2" minLength={1} type="text" name="slug" onChange={handleChangeSlug} value={formLink.slug} placeholder="yourslug" required />
+              <Icon icon="material-symbols:cached-rounded" className="cursor-pointer p-2 text-2xl text-white" onClick={generateSlug} />
+            </div>
             {slugCheck.data ? <span className="-mb-8 mt-1 font-medium text-red-500">Slug already in use.</span> : ""}
+            {formError && <span className="-mb-8 mt-1 font-medium text-red-500">{formError}</span>}
           </div>
           <div className="flex flex-[1_1_200px] flex-col">
             <Label for="url" name="Url" className="text-white" />
-            <input className="p-2" type="text" name="url" onChange={handleChange} value={formLink.url} placeholder="Url" required />
+            <input className="p-2" type="url" name="url" onChange={handleChange} value={formLink.url} placeholder="https://www.google.com" required />
           </div>
         </div>
         <div className="my-4 flex flex-wrap justify-center gap-4 px-4">
