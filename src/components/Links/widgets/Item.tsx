@@ -16,7 +16,7 @@ const Item = (link: LinkInDBType) => {
 
   const userId = sessionData?.user?.id || "";
 
-  const classButt = "w-full border-slate-600 px-4 py-2 text-sm md:text-lg font-medium shadow hover:bg-stone-300  ";
+  const classButt = "w-full border-slate-600 px-2 py-2 text-sm font-medium shadow hover:bg-stone-300  ";
 
   const [showStats, setShowStats] = useState(false);
   const classStats = showStats ? "bg-stone-400" : "bg-stone-200";
@@ -187,14 +187,14 @@ const Item = (link: LinkInDBType) => {
 
   return (
     <>
-      <div className="flex flex-wrap mx-6 mb-6 text-lg border shadow" key={link.slug}>
+      <div className="mx-6 mb-6 flex flex-wrap border text-lg shadow" key={link.slug}>
         <div className="w-full p-3 md:w-6/12">
           <Link className="font-medium hover:font-bold hover:text-slate-900" href={link.slug}>
             {link.slug}
           </Link>
           <p className="text-sm">{link.url}</p>
         </div>
-        <div className="grid w-full grid-cols-2 text-center md:w-6/12">
+        <div className="grid w-full grid-cols-3 text-center md:w-6/12 md:gap-x-4 md:gap-y-3 md:p-3">
           <button className={classButt + classStats} onClick={handleStats}>
             Stats
           </button>
@@ -210,13 +210,23 @@ const Item = (link: LinkInDBType) => {
         </div>
 
         {showStats && (
-          <LinkBoxes title="Stats">
+          <LinkBoxes
+            title="Stats"
+            closeButton={() => {
+              setShowStats(false);
+            }}
+          >
             <p className="p-1 text-center">{stats ? stats.map((stat, i) => <StatItem {...stat} index={i + 1} key={stat.id} />) : <p className="text-xl">No clicks yet.</p>}</p>
           </LinkBoxes>
         )}
 
         {showUTM && (
-          <LinkBoxes title="UTM">
+          <LinkBoxes
+            title="UTM"
+            closeButton={() => {
+              setShowUTM(false);
+            }}
+          >
             <p className="p-1 text-center">
               SOURCE
               <br />
@@ -246,29 +256,34 @@ const Item = (link: LinkInDBType) => {
         )}
 
         {showEdit && (
-          <LinkBoxes title="Edit">
+          <LinkBoxes
+            title="Edit"
+            closeButton={() => {
+              setShowEdit(false);
+            }}
+          >
             <form
               className="px-6 text-black"
               onSubmit={(e) => {
                 handleSubmit(e);
               }}
             >
-              <div className="flex flex-wrap justify-center gap-4 mb-6">
-                <div className="flex flex-[1_0_300px] flex-col ">
+              <div className="mb-6 flex flex-wrap justify-center gap-4">
+                <div className="flex flex-[1_1_300px] flex-col ">
                   <Label for="slug" name="Slug" />
-                  <input className="p-2 border rounded shadow bg-stone-100" type="text" id="slug" name="slug" onChange={handleChange} value={formEdit.slug} placeholder="Slug" />
+                  <input className="rounded border bg-stone-100 p-2 shadow" type="text" id="slug" name="slug" onChange={handleChange} value={formEdit.slug} placeholder="Slug" />
                   <input className="hidden p-2" type="hidden" id="id" name="id" onChange={handleChange} value={formEdit.id} />
                 </div>
-                <div className="flex flex-[1_0_300px] flex-col">
+                <div className="flex flex-[1_1_300px] flex-col">
                   <Label for="url" name="Url" />
-                  <input className="p-2 border rounded shadow bg-stone-100" type="text" id="url" name="url" onChange={handleChange} value={formEdit.url} placeholder="Url" />
+                  <input className="rounded border bg-stone-100 p-2 shadow" type="text" id="url" name="url" onChange={handleChange} value={formEdit.url} placeholder="Url" />
                 </div>
               </div>
-              <div className="flex flex-wrap justify-center gap-4 mb-6">
-                <div className="flex flex-[1_0_300px] flex-col">
+              <div className="mb-6 flex flex-wrap justify-center gap-4">
+                <div className="flex flex-[1_1_300px] flex-col">
                   <Label for="utm_source" name="UTM Source" />
                   <input
-                    className="p-2 border rounded shadow bg-stone-100"
+                    className="rounded border bg-stone-100 p-2 shadow"
                     type="text"
                     id="utm_source"
                     name="utm_source"
@@ -277,10 +292,10 @@ const Item = (link: LinkInDBType) => {
                     placeholder="referrer: google, instagram"
                   />
                 </div>
-                <div className="flex flex-[1_0_300px] flex-col">
+                <div className="flex flex-[1_1_300px] flex-col">
                   <Label for="utm_campaign" name="UTM Campaign" />
                   <input
-                    className="p-2 border rounded shadow bg-stone-100"
+                    className="rounded border bg-stone-100 p-2 shadow"
                     type="text"
                     id="utm_campaign"
                     name="utm_campaign"
@@ -289,10 +304,10 @@ const Item = (link: LinkInDBType) => {
                     placeholder="marketing medium: ads, social, email"
                   />
                 </div>
-                <div className="flex flex-[1_0_300px] flex-col">
+                <div className="flex flex-[1_1_300px] flex-col">
                   <Label for="utm_medium" name="UTM Medium" />
                   <input
-                    className="p-2 border rounded shadow bg-stone-100"
+                    className="rounded border bg-stone-100 p-2 shadow"
                     type="text"
                     id="utm_medium"
                     name="utm_medium"
@@ -301,14 +316,14 @@ const Item = (link: LinkInDBType) => {
                     placeholder="e.g.: product, promo code, etc"
                   />
                 </div>
-                <div className="flex flex-[1_0_300px] flex-col">
+                <div className="flex flex-[1_1_300px] flex-col">
                   <Label for="utm_term" name="UTM Term" />
-                  <input className="p-2 border rounded shadow bg-stone-100" type="text" id="utm_term" name="utm_term" onChange={handleChange} value={formEdit.utm_term} placeholder="Keywords" />
+                  <input className="rounded border bg-stone-100 p-2 shadow" type="text" id="utm_term" name="utm_term" onChange={handleChange} value={formEdit.utm_term} placeholder="Keywords" />
                 </div>
-                <div className="flex flex-[1_0_300px] flex-col">
+                <div className="flex flex-[1_1_300px] flex-col">
                   <Label for="utm_content" name="UTM Content" />
                   <input
-                    className="p-2 border rounded shadow bg-stone-100"
+                    className="rounded border bg-stone-100 p-2 shadow"
                     type="text"
                     id="utm_content"
                     name="utm_content"
@@ -318,7 +333,7 @@ const Item = (link: LinkInDBType) => {
                   />
                 </div>
               </div>
-              <button className="block px-6 py-3 mx-auto my-4 text-center text-white bg-black hover:bg-gray-900" type="submit" disabled={editing.isLoading}>
+              <button className="mx-auto my-4 block bg-black px-6 py-3 text-center text-white hover:bg-gray-900" type="submit" disabled={editing.isLoading}>
                 {editing.isLoading ? "Loading" : "Edit"}
               </button>
             </form>
@@ -326,11 +341,16 @@ const Item = (link: LinkInDBType) => {
         )}
 
         {showDelete && (
-          <LinkBoxes title="Delete">
-            <Icon icon="material-symbols:cancel" className="p-2 text-4xl cursor-pointer" onClick={handleDelete} />
+          <LinkBoxes
+            title="Delete"
+            closeButton={() => {
+              setShowDelete(false);
+            }}
+          >
+            <Icon icon="material-symbols:cancel" className="cursor-pointer p-2 text-4xl" onClick={handleDelete} />
             <Icon
               icon="material-symbols:check-box-rounded"
-              className="p-2 text-4xl cursor-pointer"
+              className="cursor-pointer p-2 text-4xl"
               onClick={() => {
                 ConfirmDelete(link);
               }}
