@@ -29,6 +29,16 @@ export const getStaticProps = async (context: Context) => {
   const dir = env.NEXTAUTH_URL + "/api/link/" + context.params.slug;
   const res = await fetch(dir);
   const link = await res.json();
+
+  if (link.status === "error") {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: true,
+      },
+    };
+  }
+
   const linkSource = link.utm_source ? "&utm_source=" + link.utm_source : "";
   const linkCampaign = link.utm_campaign ? "&utm_campaign=" + link.utm_campaign : "";
   const linkMedium = link.utm_medium ? "&utm_medium=" + link.utm_medium : "";

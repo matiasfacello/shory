@@ -19,8 +19,7 @@ const linkRes = async (req: NextApiRequest, res: NextApiResponse) => {
 
   if (!slug || typeof slug !== "string") {
     res.statusCode = 404;
-    res.send(JSON.stringify({ message: "Slug err" }));
-    return;
+    return res.json({ status: "error" });
   }
 
   const data = await prisma.sLink.findFirst({
@@ -43,8 +42,7 @@ const linkRes = async (req: NextApiRequest, res: NextApiResponse) => {
 
   if (!data) {
     res.statusCode = 404;
-    res.send(JSON.stringify({ message: "Slug err" }));
-    return;
+    return res.json({ status: "error" });
   }
 
   const click = await prisma.sLinkClicks.create({
