@@ -10,6 +10,8 @@ import type { FormEvent } from "react";
 import Label from "../atom/Label";
 import LinkBoxes from "../atom/LinkBoxes";
 import StatItem from "../atom/StatItem";
+import useLinkRemove from "../../../lib/hooks/links/useLinkRemove";
+import useLinkEdit from "../../../lib/hooks/links/useLinkEdit";
 
 const Item = (link: LinkInDBType) => {
   const { data: sessionData } = useSession();
@@ -21,15 +23,19 @@ const Item = (link: LinkInDBType) => {
   const [showStats, setShowStats] = useState(false);
   const classStats = showStats ? "bg-stone-400" : "bg-stone-200";
 
+  const hideBoxes = () => {
+    setShowStats(false);
+    setShowUTM(false);
+    setShowDelete(false);
+    setShowEdit(false);
+  };
+
   const handleStats = () => {
     if (showStats) {
       setShowStats(false);
     } else {
+      hideBoxes();
       setShowStats(true);
-
-      setShowUTM(false);
-      setShowDelete(false);
-      setShowEdit(false);
     }
   };
 
@@ -40,11 +46,8 @@ const Item = (link: LinkInDBType) => {
     if (showUTM) {
       setShowUTM(false);
     } else {
+      hideBoxes();
       setShowUTM(true);
-
-      setShowStats(false);
-      setShowDelete(false);
-      setShowEdit(false);
     }
   };
 
@@ -55,11 +58,8 @@ const Item = (link: LinkInDBType) => {
     if (showEdit) {
       setShowEdit(false);
     } else {
+      hideBoxes();
       setShowEdit(true);
-
-      setShowStats(false);
-      setShowUTM(false);
-      setShowDelete(false);
     }
   };
 
@@ -70,15 +70,10 @@ const Item = (link: LinkInDBType) => {
     if (showDelete) {
       setShowDelete(false);
     } else {
+      hideBoxes();
       setShowDelete(true);
-
-      setShowStats(false);
-      setShowUTM(false);
-      setShowEdit(false);
     }
   };
-
-  const utils = api.useContext();
 
   const { data: stats } = api.clicks.getLinkFromUser.useQuery(
     {
@@ -91,6 +86,7 @@ const Item = (link: LinkInDBType) => {
     id: link.id || 0,
     slug: link.slug || "",
     url: link.url || "",
+    tags: link.tags || "",
     utm_source: link.utm_source || "",
     utm_campaign: link.utm_campaign || "",
     utm_medium: link.utm_medium || "",
@@ -102,41 +98,7 @@ const Item = (link: LinkInDBType) => {
     setFormEdit({ ...formEdit, [event.currentTarget.name]: event.currentTarget.value });
   };
 
-  const editing = api.link.update.useMutation({
-    async onMutate(newLink) {
-      await utils.link.getFromUser.cancel();
-      const prevData = utils.link.getFromUser.getData();
-      utils.link.getFromUser.setData(
-        {
-          user: sessionData?.user?.id ?? "",
-        },
-        (old) => [...old, newLink]
-      );
-      setFormEdit({
-        id: newLink.id,
-        slug: newLink.slug,
-        url: newLink.url,
-        utm_source: newLink.utm_source || "",
-        utm_campaign: newLink.utm_campaign || "",
-        utm_medium: newLink.utm_medium || "",
-        utm_term: newLink.utm_term || "",
-        utm_content: newLink.utm_content || "",
-      });
-      setShowEdit(false);
-      return { prevData };
-    },
-    onError(err, newLink, ctx) {
-      utils.link.getFromUser.setData(
-        {
-          user: sessionData?.user?.id ?? "",
-        },
-        ctx?.prevData
-      );
-    },
-    onSettled() {
-      utils.link.getFromUser.invalidate();
-    },
-  });
+  const editing = useLinkEdit();
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -144,6 +106,7 @@ const Item = (link: LinkInDBType) => {
       id: formEdit.id,
       slug: formEdit.slug,
       url: formEdit.url,
+      tags: formEdit.tags,
       userId: sessionData?.user?.id || "",
       utm_source: formEdit.utm_source,
       utm_campaign: formEdit.utm_campaign,
@@ -151,32 +114,21 @@ const Item = (link: LinkInDBType) => {
       utm_term: formEdit.utm_term,
       utm_content: formEdit.utm_content,
     });
+    setFormEdit({
+      id: formEdit.id,
+      slug: formEdit.slug,
+      url: formEdit.url,
+      tags: formEdit.tags,
+      utm_source: formEdit.utm_source || "",
+      utm_campaign: formEdit.utm_campaign || "",
+      utm_medium: formEdit.utm_medium || "",
+      utm_term: formEdit.utm_term || "",
+      utm_content: formEdit.utm_content || "",
+    });
+    setShowEdit(false);
   };
 
-  const removing = api.link.delete.useMutation({
-    async onMutate(newLink) {
-      await utils.link.getFromUser.cancel();
-      const prevData = utils.link.getFromUser.getData();
-      utils.link.getFromUser.setData(
-        {
-          user: sessionData?.user?.id ?? "",
-        },
-        (old) => [...old, newLink]
-      );
-      return { prevData };
-    },
-    onError(err, newLink, ctx) {
-      utils.link.getFromUser.setData(
-        {
-          user: sessionData?.user?.id ?? "",
-        },
-        ctx?.prevData
-      );
-    },
-    onSettled() {
-      utils.link.getFromUser.invalidate();
-    },
-  });
+  const removing = useLinkRemove();
 
   const ConfirmDelete = (link: LinkInDBType) => {
     removing.mutate({
@@ -185,16 +137,28 @@ const Item = (link: LinkInDBType) => {
     });
   };
 
+  // Form link to Visit
+  const linkSource = link.utm_source ? "&utm_source=" + link.utm_source : "";
+  const linkCampaign = link.utm_campaign ? "&utm_campaign=" + link.utm_campaign : "";
+  const linkMedium = link.utm_medium ? "&utm_medium=" + link.utm_medium : "";
+  const linkTerm = link.utm_term ? "&utm_term=" + link.utm_term : "";
+  const linkContent = link.utm_content ? "&utm_content=" + link.utm_content : "";
+  const goTo = link.url + "/?" + linkSource + linkCampaign + linkMedium + linkTerm + linkContent;
+
   return (
     <>
       <div className="mx-6 mb-6 flex flex-wrap border text-lg shadow" key={link.slug}>
         <div className="w-full p-3 md:w-6/12">
-          <Link className="font-medium hover:font-bold hover:text-slate-900" href={link.slug}>
+          <Link className="font-medium hover:font-bold hover:text-slate-900" href={link.slug} target="_blank">
             {link.slug}
           </Link>
           <p className="text-sm">{link.url}</p>
+          <p className="text-sm">Tags: {link.tags ? link.tags : "none."}</p>
         </div>
         <div className="grid w-full grid-cols-3 text-center md:w-6/12 md:gap-x-4 md:gap-y-3 md:p-3">
+          <Link href={goTo} target="_blank">
+            <button className={classButt + "bg-stone-200"}>Link</button>
+          </Link>
           <button className={classButt + classStats} onClick={handleStats}>
             Stats
           </button>
@@ -280,6 +244,10 @@ const Item = (link: LinkInDBType) => {
                 </div>
               </div>
               <div className="mb-6 flex flex-wrap justify-center gap-4">
+                <div className="flex flex-[1_1_300px] flex-col">
+                  <Label for="tags" name="Tags" />
+                  <input className="rounded border bg-stone-100 p-2 shadow" type="text" id="tags" name="tags" onChange={handleChange} value={formEdit.tags} placeholder="Tags" />
+                </div>
                 <div className="flex flex-[1_1_300px] flex-col">
                   <Label for="utm_source" name="UTM Source" />
                   <input
