@@ -63,14 +63,26 @@ model SLink {
   url       String   @db.VarChar(2000)
   slug      String   @unique
 
-  utm_soruce   String?
+  utm_source   String?
   utm_campaign String?
   utm_medium   String?
   utm_term     String?
   utm_content  String?
 
-  userId String?
-  user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String?
+  user        User?         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  SLinkClicks SLinkClicks[]
 
   @@index(slug)
+}
+
+model SLinkClicks {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  linkId    Int
+  link      SLink    @relation(fields: [linkId], references: [id], onDelete: Cascade)
+  slug      String
+  url       String   @db.VarChar(2000)
+  ip        String?
+  geo       String?
 }
