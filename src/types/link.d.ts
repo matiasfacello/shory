@@ -2,6 +2,7 @@ declare module "link" {
   interface LinkType {
     slug: string;
     url: string;
+    tags: string | null;
     utm_source: string | null;
     utm_campaign: string | null;
     utm_medium: string | null;
@@ -13,6 +14,7 @@ declare module "link" {
     id: number;
     slug: string;
     url: string;
+    tags: string | null;
     utm_source: string | null;
     utm_campaign: string | null;
     utm_medium: string | null;

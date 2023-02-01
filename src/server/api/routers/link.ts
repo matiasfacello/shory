@@ -35,8 +35,9 @@ export const linkRouter = createTRPCRouter({
   add: userProcedure
     .input(
       z.object({
-        slug: z.string().min(1).max(32),
+        slug: z.string().min(6).max(32),
         url: z.string().min(1),
+        tags: z.string().optional(),
         userId: z.string().optional(),
         utm_source: z.string().optional(),
         utm_campaign: z.string().optional(),
@@ -47,7 +48,17 @@ export const linkRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input }) => {
       const link = await ctx.prisma.sLink.create({
-        data: input,
+        data: {
+          slug: input.slug,
+          url: input.url,
+          tags: input.tags,
+          userId: input.userId,
+          utm_source: input.utm_source,
+          utm_campaign: input.utm_campaign,
+          utm_medium: input.utm_medium,
+          utm_term: input.utm_term,
+          utm_content: input.utm_content,
+        },
       });
       return link;
     }),
@@ -56,14 +67,15 @@ export const linkRouter = createTRPCRouter({
     .input(
       z.object({
         id: z.number(),
-        slug: z.string(),
-        url: z.string(),
-        utm_source: z.string(),
-        utm_campaign: z.string(),
-        utm_medium: z.string(),
-        utm_term: z.string(),
-        utm_content: z.string(),
+        slug: z.string().min(6).max(32),
+        url: z.string().min(1),
+        tags: z.string().optional(),
         userId: z.string(),
+        utm_source: z.string().optional(),
+        utm_campaign: z.string().optional(),
+        utm_medium: z.string().optional(),
+        utm_term: z.string().optional(),
+        utm_content: z.string().optional(),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -75,6 +87,7 @@ export const linkRouter = createTRPCRouter({
         data: {
           slug: input.slug,
           url: input.url,
+          tags: input.tags,
           utm_source: input.utm_source,
           utm_campaign: input.utm_campaign,
           utm_medium: input.utm_medium,

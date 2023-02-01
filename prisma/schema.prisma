@@ -38,15 +38,16 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(cuid())
+  id            String         @id @default(cuid())
   name          String?
-  email         String?   @unique
+  email         String?        @unique
   emailVerified DateTime?
   image         String?
   role          String?
   accounts      Account[]
   sessions      Session[]
   SLink         SLink[]
+  Subscription  Subscription[]
 }
 
 model VerificationToken {
@@ -62,6 +63,7 @@ model SLink {
   createdAt DateTime @default(now())
   url       String   @db.VarChar(2000)
   slug      String   @unique
+  tags      String?
 
   utm_source   String?
   utm_campaign String?
@@ -69,9 +71,10 @@ model SLink {
   utm_term     String?
   utm_content  String?
 
-  userId      String?
-  user        User?         @relation(fields: [userId], references: [id], onDelete: Cascade)
-  SLinkClicks SLinkClicks[]
+  userId       String?
+  user         User?          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  SLinkClicks  SLinkClicks[]
+  Subscription Subscription[]
 
   @@index(slug)
 }
@@ -86,3 +89,142 @@ model SLinkClicks {
   ip        String?
   geo       String?
 }
+
+model Plans {
+  id           Int            @id @default(autoincrement())
+  name         String
+  linkQuota    String
+  clickQuota   String
+  Subscription Subscription[]
+}
+
+model Subscription {
+  id         Int      @id @default(autoincrement())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  planId     Int
+  plans      Plans    @relation(fields: [planId], references: [id], onDelete: Cascade)
+  linkUsage  String?
+  clickUsage String?
+  startDate  DateTime
+  endDate    DateTime
+  paymentId  Int
+  SLink      SLink?   @relation(fields: [sLinkId], references: [id])
+  sLinkId    Int?
+}
+
+// ----------------- SCHEMA FOR DBDIAGRAM.io
+
+// Table Account {
+//   id string [pk, increment]
+//   userId string
+//   type string
+//   provider string
+//   providerAccountId string
+//   refresh_token string
+//   access_token string
+//   expires_at int
+//   token_type string
+//   scope string
+//   id_token string
+//   session_state string
+//   user string [ref: > User.id]
+// }
+
+// Table Session {
+//   id           string   [pk, increment]
+//   sessionToken string
+//   userId       string
+//   expires      datetime
+//   user string [ref: > User.id]
+// }
+
+// Table User {
+//   id            string    [pk]
+//   name string
+//   email         string
+//   emailVerified datetime
+//   image         string
+//   role          string
+//   accounts string [ref: > Account.id]
+//   sessions string [ref: > Session.id]
+//   SLink         SLink[]
+// }
+
+// Table VerificationToken {
+//   identifier string
+//   token      string
+//   expires    datetime
+// }
+
+// Table SLink {
+//   id int [pk, increment]
+//   createdAt datetime 
+//   url string   
+//   slug string
+
+//   utm_source   string
+//   utm_campaign string
+//   utm_medium   string
+//   utm_term     string
+//   utm_content  string
+
+//   userId      string
+//   user string [ref: > User.id]
+//   SLinkClicks int [ref: > SLinkClicks.id]
+
+// }
+
+// Table SLinkClicks {
+//   id        int      [pk, increment]
+//   createdAt datetime
+//   linkId    int [ref: > SLink.id]
+//   slug      string
+//   url       string
+//   ip        string
+//   geo       string
+// }
+
+// Table Plans {
+//   id int [pk, increment]
+//   name string
+//   linkQuota string
+//   clickQuota string
+// }
+
+// Table Subscription {
+//   id int [pk, increment]
+//   userId string [ref: > User.id]
+//   planId int [ref: > Plans.id]
+//   linkUsage string
+//   clickUsage string
+//   startDate  datetime
+//   endDate datetime
+//   paymentId int 
+// }
+
+// Table Payments {
+//   id int [pk, increment]
+//   userId string [ref: > User.id]
+//   subscriptionId int [ref: > Subscription.id]
+//   processor string
+//   processorId string
+//   price string
+//   createdAt datetime
+// }
+
+// Table Tree {
+//   id int [pk, increment]
+//   userId string [ref: > User.id]
+//   order int
+//   name string
+//   value string
+//   url string
+//   image string
+//   bgColor string
+//   textColor string
+//   size string
+//   createdAt datetime
+// }
+
+// }
