@@ -1,12 +1,13 @@
 import { useSession } from "next-auth/react";
 import { useState } from "react";
-import { api } from "../../utils/api";
-import type { FormEvent } from "react";
 import Label from "./atom/Label";
 import { Icon } from "@iconify-icon/react";
 import { rndString } from "../general/atoms/rndString";
-import type { LinkType } from "link";
 import useLinkCreate from "../../lib/hooks/links/useLinkCreate";
+import useLinkSlugCheck from "../../lib/hooks/links/useLinkSlugCheck";
+
+import type { FormEvent } from "react";
+import type { LinkType } from "link";
 
 const LinkAdd: React.FC = () => {
   const { data: sessionData } = useSession();
@@ -16,14 +17,7 @@ const LinkAdd: React.FC = () => {
 
   const [formError, setFormError] = useState("");
 
-  const slugCheck = api.link.check.useQuery(
-    { slug: formLink.slug },
-    {
-      refetchOnReconnect: false,
-      refetchOnMount: false,
-      refetchOnWindowFocus: false,
-    }
-  );
+  const slugCheck = useLinkSlugCheck(formLink.slug);
 
   const handleChange = (event: React.SyntheticEvent<HTMLInputElement>) => {
     setFormLink({ ...formLink, [event.currentTarget.name]: event.currentTarget.value });
