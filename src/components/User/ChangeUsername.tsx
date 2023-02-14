@@ -6,6 +6,8 @@ import useUserNameCheck from "../../lib/hooks/user/useUserNameCheck";
 import useUserNameCheckTime from "../../lib/hooks/user/useUserNameCheckTime";
 
 import Label from "../Links/atom/Label";
+import UserSettingsBox from "./atom/UserSettingsBox";
+
 import type { FormEvent } from "react";
 
 interface UserNameChange {
@@ -62,54 +64,56 @@ const ChangeUsername: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-wrap justify-center">
+    <>
       {sessionData ? (
-        <form
-          className="flex w-full max-w-xl flex-col gap-6 rounded-xl bg-gray-900 py-8 px-12"
-          onSubmit={(e) => {
-            handleSubmit(e);
-          }}
-        >
-          <h3 className="text-2xl font-bold text-white">Change Name</h3>
-          <div className="text-white">
-            Requirements:
-            <p className={formErrorShort ? "text-red-400" : "text-green-400"}>- Between 6 and 24 characters</p>
-            <p className={formErrorSpaces ? "text-red-400" : "text-green-400"}>- No spaces allowed</p>
-            <p className={formErrorMatch ? "text-red-400" : "text-green-400"}>- Names in the form must match</p>
-            <p className={nameCheck.data ? "text-red-400" : "text-green-400"}>- Name is already in use</p>
-            <p className={timeCheck.data ? "text-red-400" : "text-green-400"}>- Can only change name every 7 days</p>
-          </div>
-          <div className="flex flex-col gap-2">
-            <Label for="actualName" name="Actual Name" className="text-white" />
-            <input type="text" name="actualName" id="actualName" value={sessionData.user.name || "-"} className="border-0 bg-transparent text-white" readOnly />
-          </div>
-          <div className="flex flex-col gap-2">
-            <Label for="newName" name="New Name" className="text-white" />
-            <input onChange={handleChangeName} value={formName.newName} required type="text" name="newName" minLength={6} maxLength={24} id="newName" placeholder="New Name" className="p-2" />
-          </div>
-          <div className="flex flex-col gap-2">
-            <Label for="confirmNewName" name="Confirm new Name" className="text-white" />
-            <input
-              onChange={handleChange}
-              value={formName.confirmNewName}
-              required
-              type="text"
-              name="confirmNewName"
-              minLength={6}
-              maxLength={24}
-              id="confirmNewName"
-              placeholder="Confirm New Name"
-              className="p-2"
-            />
-          </div>
-          <button className="rounded bg-gray-700 p-4 font-bold text-white transition hover:bg-gray-600" type="submit" disabled={mutation.isLoading}>
-            {mutation.isLoading ? "Loading" : "Change"}
-          </button>
-        </form>
+        <UserSettingsBox>
+          <form
+            className="flex w-full max-w-xl flex-col gap-6 rounded-xl bg-gray-900 py-8 px-12"
+            onSubmit={(e) => {
+              handleSubmit(e);
+            }}
+          >
+            <UserSettingsBox.Title title="Change Name" />
+            <div className="text-white">
+              Requirements:
+              <p className={formErrorShort ? "text-red-400" : "text-green-400"}>- Between 6 and 24 characters</p>
+              <p className={formErrorSpaces ? "text-red-400" : "text-green-400"}>- No spaces allowed</p>
+              <p className={formErrorMatch ? "text-red-400" : "text-green-400"}>- Names in the form must match</p>
+              <p className={nameCheck.data ? "text-red-400" : "text-green-400"}>- Name is already in use</p>
+              <p className={timeCheck.data ? "text-red-400" : "text-green-400"}>- Can only change name every 7 days</p>
+            </div>
+            <div className="flex flex-col gap-2">
+              <Label for="actualName" name="Actual Name" className="text-white" />
+              <input type="text" name="actualName" id="actualName" value={sessionData.user.name || "No name set"} className="border-0 bg-transparent text-white" readOnly />
+            </div>
+            <div className="flex flex-col gap-2">
+              <Label for="newName" name="New Name" className="text-white" />
+              <input onChange={handleChangeName} value={formName.newName} required type="text" name="newName" minLength={6} maxLength={24} id="newName" placeholder="New Name" className="p-2" />
+            </div>
+            <div className="flex flex-col gap-2">
+              <Label for="confirmNewName" name="Confirm new Name" className="text-white" />
+              <input
+                onChange={handleChange}
+                value={formName.confirmNewName}
+                required
+                type="text"
+                name="confirmNewName"
+                minLength={6}
+                maxLength={24}
+                id="confirmNewName"
+                placeholder="Confirm New Name"
+                className="p-2"
+              />
+            </div>
+            <button className="rounded bg-gray-700 p-4 font-bold text-white transition hover:bg-gray-600" type="submit" disabled={mutation.isLoading}>
+              {mutation.isLoading ? "Loading" : "Change"}
+            </button>
+          </form>
+        </UserSettingsBox>
       ) : (
         ""
       )}
-    </div>
+    </>
   );
 };
 
