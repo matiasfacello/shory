@@ -68,7 +68,7 @@ const LinkAdd: React.FC = () => {
           <div className="flex flex-[1_1_200px] flex-col">
             <Label for="slug" name="Slug" className="text-white" />
             <div className="flex items-center">
-              <input className="flex-[1_1_200px] p-2" minLength={1} type="text" name="slug" onChange={handleChangeSlug} value={formLink.slug} placeholder="yourslug" required />
+              <input className="flex-[1_1_200px] p-2" minLength={6} type="text" name="slug" onChange={handleChangeSlug} value={formLink.slug} placeholder="yourslug" required />
               <Icon icon="material-symbols:cached-rounded" className="cursor-pointer p-2 text-2xl text-white" onClick={generateSlug} />
             </div>
             {slugCheck.data ? <span className="-mb-8 mt-1 font-medium text-red-500">Slug already in use.</span> : ""}
