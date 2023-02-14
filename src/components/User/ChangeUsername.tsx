@@ -54,7 +54,7 @@ const ChangeUsername: React.FC = () => {
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (formErrorShort || formErrorSpaces || formErrorMatch || nameCheck.data) {
+    if (formErrorShort || formErrorSpaces || formErrorMatch || nameCheck.data || timeCheck.data) {
       return;
     }
 
