@@ -76,6 +76,21 @@ export const userRouter = createTRPCRouter({
       return user;
     }),
 
+  delete: userProcedure
+    .input(
+      z.object({
+        id: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const user = await ctx.prisma.user.delete({
+        where: {
+          id: input.id,
+        },
+      });
+      return user;
+    }),
+
   // ADMIN PROCEDURES -------------------------------- //
   // adminTest: adminProcedure.query(() => {
   //   return "User is Admin";

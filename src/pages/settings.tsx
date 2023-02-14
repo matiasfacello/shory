@@ -5,6 +5,7 @@ import Head from "next/head";
 
 import Navbar from "../components/UI/Navbar";
 import ChangeUsername from "../components/User/ChangeUsername";
+import DeleteUser from "../components/User/DeteleUser";
 
 const Settings: NextPage = () => {
   useSession({
@@ -25,6 +26,7 @@ const Settings: NextPage = () => {
       <main className="min-h-screen bg-slate-800">
         <div className="container m-auto px-4 py-16">
           <ChangeUsername />
+          <DeleteUser />
         </div>
       </main>
     </>
