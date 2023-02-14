@@ -6,20 +6,20 @@ const AuthBar: React.FC = () => {
   const { data: sessionData } = useSession();
 
   return (
-    <div className="flex flex-wrap items-center justify-end h-16 gap-16 bg-slate-900">
-      <p className="text-lg text-center text-white">{sessionData ? <span>{sessionData.user?.email}</span> : ""}</p>
+    <div className="flex h-16 flex-wrap items-center justify-end gap-16 bg-slate-900">
+      <p className="text-center text-lg text-white">{sessionData ? <span>{sessionData.user?.email}</span> : ""}</p>
       {sessionData ? (
         <div className="flex items-center justify-end gap-4 text-sm">
-          <Link className="px-6 py-3 font-semibold text-center text-white no-underline transition border border-white rounded-full hover:bg-white/20" href="/settigns">
+          <Link className="rounded-full border border-white px-6 py-3 text-center font-semibold text-white no-underline transition hover:bg-white/20" href="/settings">
             Settings
           </Link>
-          <button className="px-6 py-3 font-semibold text-center text-white no-underline transition border border-white rounded-full hover:bg-white/20" onClick={() => signOut()}>
+          <button className="rounded-full border border-white px-6 py-3 text-center font-semibold text-white no-underline transition hover:bg-white/20" onClick={() => signOut()}>
             Logout
           </button>
         </div>
       ) : (
         <div>
-          <button className="px-6 py-3 font-semibold text-center text-white no-underline transition border border-white rounded-full hover:bg-white/20" onClick={() => signIn()}>
+          <button className="rounded-full border border-white px-6 py-3 text-center font-semibold text-white no-underline transition hover:bg-white/20" onClick={() => signIn()}>
             Login
           </button>
         </div>
