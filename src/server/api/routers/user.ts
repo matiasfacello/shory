@@ -1,4 +1,4 @@
-import { adminProcedure, createTRPCRouter, publicProcedure } from "../trpc";
+import { userProcedure, createTRPCRouter, publicProcedure } from "../trpc";
 import { z } from "zod";
 
 export const userRouter = createTRPCRouter({
@@ -7,6 +7,25 @@ export const userRouter = createTRPCRouter({
     return ctx.prisma.user.count({
       where: {
         email: input.email,
+      },
+    });
+  }),
+
+  checkName: publicProcedure.input(z.object({ name: z.string() })).query(({ ctx, input }) => {
+    return ctx.prisma.user.count({
+      where: {
+        name: input.name,
+      },
+    });
+  }),
+
+  checkTime: publicProcedure.input(z.object({ id: z.string() })).query(({ ctx, input }) => {
+    return ctx.prisma.userNameChanges.count({
+      where: {
+        userId: input.id,
+        createdAt: {
+          lte: new Date(new Date().setDate(new Date().getDate() + 7)),
+        },
       },
     });
   }),
@@ -29,6 +48,33 @@ export const userRouter = createTRPCRouter({
   }),
 
   // USER PROCEDURES -------------------------------- //
+
+  changeName: userProcedure
+    .input(
+      z.object({
+        name: z.string().min(6).max(32),
+        oldName: z.string(),
+        id: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const user = await ctx.prisma.user.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          name: input.name,
+        },
+      });
+      await ctx.prisma.userNameChanges.create({
+        data: {
+          userId: input.id,
+          oldName: input.oldName,
+          newName: input.name,
+        },
+      });
+      return user;
+    }),
 
   // ADMIN PROCEDURES -------------------------------- //
   // adminTest: adminProcedure.query(() => {
