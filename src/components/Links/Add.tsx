@@ -1,4 +1,4 @@
-import { useSession } from "next-auth/react";
+import { useSession, signIn } from "next-auth/react";
 import { useState } from "react";
 import Label from "./atom/Label";
 import { Icon } from "@iconify-icon/react";
@@ -31,12 +31,16 @@ const LinkAdd: React.FC = () => {
   const mutation = useLinkCreate();
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    setFormError("");
     event.preventDefault();
+
+    if (!sessionData) return;
+
+    setFormError("");
     if (formLink.slug.length < 6) {
       setFormError("Slug is too short");
       return;
     }
+
     mutation.mutate({
       slug: formLink.slug,
       url: formLink.url,
@@ -105,9 +109,15 @@ const LinkAdd: React.FC = () => {
             <input className="p-2" type="text" name="utm_content" onChange={handleChange} value={formLink.utm_content || ""} placeholder="Use to differentiate content" />
           </div>
         </div>
-        <button className="bg-black p-4 text-white hover:bg-gray-900" type="submit" disabled={mutation.isLoading}>
-          {mutation.isLoading ? "Loading" : "Create"}
-        </button>
+        {sessionData ? (
+          <button className="bg-black p-4 text-white hover:bg-gray-900" type="submit" disabled={mutation.isLoading}>
+            {mutation.isLoading ? "Loading" : "Create"}
+          </button>
+        ) : (
+          <button className="bg-black p-4 text-white hover:bg-gray-900" onClick={() => signIn()}>
+            Login to create
+          </button>
+        )}
         {error && <p>{error}</p>}
       </form>
     </>
