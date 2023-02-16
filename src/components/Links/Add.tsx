@@ -1,13 +1,17 @@
 import { useSession, signIn } from "next-auth/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Label from "./atom/Label";
 import { Icon } from "@iconify-icon/react";
 import { rndString } from "../general/atoms/rndString";
+
 import useLinkCreate from "../../lib/hooks/links/useLinkCreate";
 import useLinkSlugCheck from "../../lib/hooks/links/useLinkSlugCheck";
+import useLinkCount from "../../lib/hooks/links/useLinkCount";
+import useUserSubCheck from "../../lib/hooks/user/useUserSubCheck";
 
 import type { FormEvent } from "react";
 import type { LinkType } from "link";
+import Link from "next/link";
 
 const LinkAdd: React.FC = () => {
   const { data: sessionData } = useSession();
@@ -18,6 +22,18 @@ const LinkAdd: React.FC = () => {
   const [formError, setFormError] = useState("");
 
   const slugCheck = useLinkSlugCheck(formLink.slug);
+
+  const subCheck = useUserSubCheck(sessionData?.user.id || "");
+  const linkCount = useLinkCount(sessionData?.user.id || "");
+  const [linkFull, setLinkFull] = useState(false);
+
+  useEffect(() => {
+    if (linkCount.data && subCheck) {
+      if (linkCount.data >= subCheck.linkQuota) {
+        setLinkFull(true);
+      } else setLinkFull(false);
+    }
+  }, [linkCount.data, subCheck]);
 
   const handleChange = (event: React.SyntheticEvent<HTMLInputElement>) => {
     setFormLink({ ...formLink, [event.currentTarget.name]: event.currentTarget.value });
@@ -34,6 +50,8 @@ const LinkAdd: React.FC = () => {
     event.preventDefault();
 
     if (!sessionData) return;
+
+    if (linkFull) return;
 
     setFormError("");
     if (formLink.slug.length < 6) {
@@ -110,9 +128,20 @@ const LinkAdd: React.FC = () => {
           </div>
         </div>
         {sessionData ? (
-          <button className="bg-black p-4 text-white hover:bg-gray-900" type="submit" disabled={mutation.isLoading}>
-            {mutation.isLoading ? "Loading" : "Create"}
-          </button>
+          <>
+            {linkFull ? (
+              <button className="bg-black p-4 text-white hover:bg-gray-900" disabled>
+                No more quota.{" "}
+                <Link href="/upgrade" className="font-bold">
+                  Upgrade!
+                </Link>
+              </button>
+            ) : (
+              <button className="bg-black p-4 text-white hover:bg-gray-900" type="submit" disabled={mutation.isLoading}>
+                {mutation.isLoading ? "Loading" : "Create"}
+              </button>
+            )}
+          </>
         ) : (
           <button className="bg-black p-4 text-white hover:bg-gray-900" onClick={() => signIn()}>
             Login to create
