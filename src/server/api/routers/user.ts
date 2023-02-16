@@ -11,25 +11,6 @@ export const userRouter = createTRPCRouter({
     });
   }),
 
-  checkName: publicProcedure.input(z.object({ name: z.string() })).query(({ ctx, input }) => {
-    return ctx.prisma.user.count({
-      where: {
-        name: input.name,
-      },
-    });
-  }),
-
-  checkTime: publicProcedure.input(z.object({ id: z.string() })).query(({ ctx, input }) => {
-    return ctx.prisma.userNameChanges.count({
-      where: {
-        userId: input.id,
-        createdAt: {
-          gte: new Date(new Date().setDate(new Date().getDate() - 7)),
-        },
-      },
-    });
-  }),
-
   checkIfAdmin: publicProcedure.input(z.object({ id: z.string() })).query(({ ctx, input }) => {
     return ctx.prisma.user.count({
       where: {
@@ -48,6 +29,25 @@ export const userRouter = createTRPCRouter({
   }),
 
   // USER PROCEDURES -------------------------------- //
+
+  checkName: userProcedure.input(z.object({ name: z.string() })).query(({ ctx, input }) => {
+    return ctx.prisma.user.count({
+      where: {
+        name: input.name,
+      },
+    });
+  }),
+
+  checkTime: userProcedure.input(z.object({ id: z.string() })).query(({ ctx, input }) => {
+    return ctx.prisma.userNameChanges.count({
+      where: {
+        userId: input.id,
+        createdAt: {
+          gte: new Date(new Date().setDate(new Date().getDate() - 7)),
+        },
+      },
+    });
+  }),
 
   changeName: userProcedure
     .input(
