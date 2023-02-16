@@ -21,6 +21,14 @@ export const linkRouter = createTRPCRouter({
 
   // USER PROCEDURES -------------------------------- //
 
+  count: userProcedure.input(z.object({ userId: z.string() })).query(({ ctx, input }) => {
+    return ctx.prisma.sLink.count({
+      where: {
+        userId: input.userId,
+      },
+    });
+  }),
+
   getFromUser: userProcedure.input(z.object({ user: z.string() })).query(({ ctx, input }) => {
     return ctx.prisma.sLink.findMany({
       where: {
