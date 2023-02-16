@@ -1,8 +1,6 @@
-import { signIn, signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import AuthBar from "../User/AuthBar";
-// import { api } from "../../utils/api";
 
 const Navbar: React.FC = () => {
   return (
