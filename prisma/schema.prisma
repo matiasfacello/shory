@@ -81,10 +81,9 @@ model SLink {
   utm_term     String?
   utm_content  String?
 
-  userId       String?
-  user         User?          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  SLinkClicks  SLinkClicks[]
-  Subscription Subscription[]
+  userId      String?
+  user        User?         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  SLinkClicks SLinkClicks[]
 
   @@index(slug)
 }
@@ -103,8 +102,8 @@ model SLinkClicks {
 model Plans {
   id           Int            @id @default(autoincrement())
   name         String
-  linkQuota    String
-  clickQuota   String
+  title        String
+  linkQuota    Int
   Subscription Subscription[]
 }
 
@@ -118,7 +117,5 @@ model Subscription {
   clickUsage String?
   startDate  DateTime
   endDate    DateTime
-  paymentId  Int
-  SLink      SLink?   @relation(fields: [sLinkId], references: [id])
-  sLinkId    Int?
+  paymentId  Int?
 }
