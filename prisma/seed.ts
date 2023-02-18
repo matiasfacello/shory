@@ -2,22 +2,29 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 async function main() {
+  const tier0 = await prisma.plans.create({
+    data: {
+      name: "tier0",
+      title: "Free Plan",
+      linkQuota: 10,
+    },
+  });
   const tier1 = await prisma.plans.create({
     data: {
       name: "tier1",
-      title: "Tier 1",
-      linkQuota: 10,
+      title: "Basic Plan",
+      linkQuota: 50,
     },
   });
   const tier2 = await prisma.plans.create({
     data: {
       name: "tier2",
-      title: "Tier 2",
-      linkQuota: 50,
+      title: "Standard Plan",
+      linkQuota: 200,
     },
   });
 
-  console.log({ tier1, tier2 });
+  console.log({ tier0, tier1, tier2 });
 }
 main()
   .then(async () => {
