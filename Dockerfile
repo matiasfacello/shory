@@ -7,7 +7,7 @@ RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
 # Install dependencies based on the preferred package manager
-COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
+COPY prisma/ package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
 RUN \
   if [ -f yarn.lock ]; then yarn --frozen-lockfile; \
   elif [ -f package-lock.json ]; then npm ci; \
@@ -17,7 +17,6 @@ RUN \
 
 
 RUN npx prisma generate
-RUN npx prisma db seed
 
 # Rebuild the source code only when needed
 FROM base AS builder
@@ -29,6 +28,21 @@ COPY . .
 # Learn more here: https://nextjs.org/telemetry
 # Uncomment the following line in case you want to disable telemetry during the build.
 ENV NEXT_TELEMETRY_DISABLED 1
+
+ARG DATABASE_URL=DEFAULT_WRONG
+ENV DATABASE_URL=${DATABASE_URL}
+ARG DISCORD_CLIENT_ID=DEFAULT_WRONG
+ENV DISCORD_CLIENT_ID=${DISCORD_CLIENT_ID}
+ARG DISCORD_CLIENT_SECRET=DEFAULT_WRONG
+ENV DISCORD_CLIENT_SECRET=${DISCORD_CLIENT_SECRET}
+ARG NEXTAUTH_SECRET=DEFAULT_WRONG
+ENV NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
+ARG NEXTAUTH_URL=DEFAULT_WRONG
+ENV NEXTAUTH_URL=${NEXTAUTH_URL}
+ARG EMAIL_SERVER=DEFAULT_WRONG
+ENV EMAIL_SERVER=${EMAIL_SERVER}
+ARG EMAIL_FROM=DEFAULT_WRONG
+ENV EMAIL_FROM=${EMAIL_FROM}
 
 RUN npm run build
 
