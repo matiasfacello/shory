@@ -14,7 +14,7 @@ const useUserSubCheck = (id: string) => {
 
   const subscription = api.subscription.get.useQuery({ userId: id });
 
-  const response = api.subscription.getPlan.useQuery({ id: 1 });
+  const response = api.subscription.getPlan.useQuery({ name: "tier0" });
 
   useEffect(() => {
     //Checks if user has active subscription

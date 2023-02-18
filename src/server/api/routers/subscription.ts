@@ -23,10 +23,10 @@ export const subscriptionRouter = createTRPCRouter({
     });
   }),
 
-  getPlan: userProcedure.input(z.object({ id: z.number() })).query(({ ctx, input }) => {
+  getPlan: userProcedure.input(z.object({ name: z.string() })).query(({ ctx, input }) => {
     return ctx.prisma.plans.findFirst({
       where: {
-        id: input.id,
+        name: input.name,
       },
     });
   }),
