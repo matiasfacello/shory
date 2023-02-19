@@ -14,9 +14,8 @@ import { prisma } from "./db";
  **/
 declare module "next-auth" {
   interface Session extends DefaultSession {
-    user: {
+    user?: {
       id: string;
-      // ...other properties
       role: string | null | undefined;
     } & DefaultSession["user"];
   }
@@ -45,8 +44,8 @@ export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
   providers: [
     DiscordProvider({
-      clientId: env.DISCORD_CLIENT_ID,
-      clientSecret: env.DISCORD_CLIENT_SECRET,
+      clientId: env.DISCORD_CLIENT_ID || "",
+      clientSecret: env.DISCORD_CLIENT_SECRET || "",
     }),
     EmailProvider({
       server: env.EMAIL_SERVER,
