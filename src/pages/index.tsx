@@ -4,6 +4,7 @@ import Head from "next/head";
 import Navbar from "../components/UI/Navbar";
 import LinkAdd from "../components/Links/Add";
 import LinkList from "../components/Links/ListForUser";
+import { LinkProvider } from "../lib/context/linkContext";
 
 const Home: NextPage = () => {
   return (
@@ -15,9 +16,11 @@ const Home: NextPage = () => {
       </Head>
       <Navbar />
       <main className="min-h-screen bg-slate-800">
-        <div className="container px-4 py-16 m-auto">
-          <LinkAdd />
-          <LinkList />
+        <div className="container m-auto px-4 py-16">
+          <LinkProvider>
+            <LinkAdd />
+            <LinkList />
+          </LinkProvider>
         </div>
       </main>
     </>

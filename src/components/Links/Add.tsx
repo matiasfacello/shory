@@ -8,6 +8,7 @@ import useLinkCreate from "../../lib/hooks/links/useLinkCreate";
 import useLinkSlugCheck from "../../lib/hooks/links/useLinkSlugCheck";
 import useLinkCount from "../../lib/hooks/links/useLinkCount";
 import useUserSubCheck from "../../lib/hooks/user/useUserSubCheck";
+import { useLinkContext } from "../../lib/context/linkContext";
 
 import type { FormEvent } from "react";
 import type { LinkType } from "link";
@@ -17,7 +18,9 @@ const LinkAdd: React.FC = () => {
   const { data: sessionData } = useSession();
   const error = "";
 
-  const [formLink, setFormLink] = useState<LinkType>({ slug: "", url: "", tags: "", utm_source: "", utm_campaign: "", utm_medium: "", utm_term: "", utm_content: "" });
+  const { setIsLoadingMutation } = useLinkContext();
+
+  const [formLink, setFormLink] = useState<LinkType>({ slug: "", url: "", tags: null, utm_source: null, utm_campaign: null, utm_medium: null, utm_term: null, utm_content: null });
 
   const [formError, setFormError] = useState("");
 
@@ -45,6 +48,9 @@ const LinkAdd: React.FC = () => {
   };
 
   const mutation = useLinkCreate();
+
+  if (mutation.isLoading) setIsLoadingMutation(true);
+  else setIsLoadingMutation(false);
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
