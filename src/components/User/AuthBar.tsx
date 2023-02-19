@@ -12,7 +12,7 @@ const AuthBar: React.FC = () => {
   const subscription = useUserSubCheck(sessionData?.user.id || "");
 
   const [openMenu, setOpenMenu] = useState(false);
-  const menuClass = "fixed top-0 bottom-0 right-0 w-full lg:w-96 bg-slate-900/90 transition-all delay-150 duration-500  ";
+  const menuClass = "fixed top-0 bottom-0 right-0 w-full lg:w-96 backdrop-blur-lg border-l-2 bg-slate-900/90 transition-all delay-150 duration-500  ";
   const drawerRef = useRef(null);
 
   useEffect(() => {
