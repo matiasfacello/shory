@@ -68,13 +68,13 @@ const LinkAdd: React.FC = () => {
     mutation.mutate({
       slug: formLink.slug,
       url: formLink.url,
-      tags: formLink.tags || undefined,
-      userId: sessionData?.user?.id || undefined,
-      utm_source: formLink.utm_source || undefined,
-      utm_campaign: formLink.utm_campaign || undefined,
-      utm_medium: formLink.utm_medium || undefined,
-      utm_term: formLink.utm_term || undefined,
-      utm_content: formLink.utm_content || undefined,
+      userId: sessionData?.user?.id,
+      tags: formLink.tags || null,
+      utm_source: formLink.utm_source || null,
+      utm_campaign: formLink.utm_campaign || null,
+      utm_medium: formLink.utm_medium || null,
+      utm_term: formLink.utm_term || null,
+      utm_content: formLink.utm_content || null,
     });
     setFormLink({ slug: "", url: "", tags: "", utm_source: "", utm_campaign: "", utm_medium: "", utm_term: "", utm_content: "" });
   };

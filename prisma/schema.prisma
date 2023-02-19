@@ -81,8 +81,8 @@ model SLink {
   utm_term     String?
   utm_content  String?
 
-  userId      String?
-  user        User?         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String
+  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   SLinkClicks SLinkClicks[]
 
   @@index(slug)

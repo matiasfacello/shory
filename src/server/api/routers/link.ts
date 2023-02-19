@@ -45,13 +45,13 @@ export const linkRouter = createTRPCRouter({
       z.object({
         slug: z.string().min(6).max(32),
         url: z.string().min(1),
-        tags: z.string().optional(),
-        userId: z.string().optional(),
-        utm_source: z.string().optional(),
-        utm_campaign: z.string().optional(),
-        utm_medium: z.string().optional(),
-        utm_term: z.string().optional(),
-        utm_content: z.string().optional(),
+        userId: z.string(),
+        tags: z.string().nullable(),
+        utm_source: z.string().nullable(),
+        utm_campaign: z.string().nullable(),
+        utm_medium: z.string().nullable(),
+        utm_term: z.string().nullable(),
+        utm_content: z.string().nullable(),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -77,13 +77,13 @@ export const linkRouter = createTRPCRouter({
         id: z.number(),
         slug: z.string().min(6).max(32),
         url: z.string().min(1),
-        tags: z.string().optional(),
         userId: z.string(),
-        utm_source: z.string().optional(),
-        utm_campaign: z.string().optional(),
-        utm_medium: z.string().optional(),
-        utm_term: z.string().optional(),
-        utm_content: z.string().optional(),
+        tags: z.string().nullable(),
+        utm_source: z.string().nullable(),
+        utm_campaign: z.string().nullable(),
+        utm_medium: z.string().nullable(),
+        utm_term: z.string().nullable(),
+        utm_content: z.string().nullable(),
       })
     )
     .mutation(async ({ ctx, input }) => {
