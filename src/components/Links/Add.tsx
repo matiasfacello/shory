@@ -26,8 +26,8 @@ const LinkAdd: React.FC = () => {
 
   const slugCheck = useLinkSlugCheck(formLink.slug);
 
-  const subCheck = useUserSubCheck(sessionData?.user.id || "");
-  const linkCount = useLinkCount(sessionData?.user.id || "");
+  const subCheck = useUserSubCheck(sessionData?.user?.id || "");
+  const linkCount = useLinkCount(sessionData?.user?.id || "");
   const [linkFull, setLinkFull] = useState(false);
 
   useEffect(() => {
@@ -55,7 +55,7 @@ const LinkAdd: React.FC = () => {
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (!sessionData) return;
+    if (!sessionData || !sessionData.user) return;
 
     if (linkFull) return;
 

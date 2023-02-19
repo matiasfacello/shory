@@ -14,7 +14,7 @@ const DeleteUser: React.FC = () => {
 
   const handleDelete = () => {
     // delete the user
-    mutation.mutate({ id: sessionData?.user.id || "" });
+    mutation.mutate({ id: sessionData?.user?.id || "" });
   };
 
   return (

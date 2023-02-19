@@ -25,7 +25,7 @@ const ChangeUsername: React.FC = () => {
   const [formErrorMatch, setFormErrorMatch] = useState(true);
 
   const nameCheck = useUserNameCheck(formName.newName);
-  const timeCheck = useUserNameCheckTime(sessionData?.user.id || "");
+  const timeCheck = useUserNameCheckTime(sessionData?.user?.id || "");
 
   const handleChange = (event: React.SyntheticEvent<HTMLInputElement>) => {
     setFormName({ ...formName, [event.currentTarget.name]: event.currentTarget.value });
@@ -60,7 +60,7 @@ const ChangeUsername: React.FC = () => {
       return;
     }
 
-    mutation.mutate({ id: sessionData?.user.id || "", name: formName.newName, oldName: sessionData?.user.name || "" });
+    mutation.mutate({ id: sessionData?.user?.id || "", name: formName.newName, oldName: sessionData?.user?.name || "" });
   };
 
   return (
@@ -84,7 +84,7 @@ const ChangeUsername: React.FC = () => {
             </div>
             <div className="flex flex-col gap-2">
               <Label for="actualName" name="Actual Name" className="text-white" />
-              <input type="text" name="actualName" id="actualName" value={sessionData.user.name || "No name set"} className="border-0 bg-transparent text-white" readOnly />
+              <input type="text" name="actualName" id="actualName" value={sessionData.user?.name || "No name set"} className="border-0 bg-transparent text-white" readOnly />
             </div>
             <div className="flex flex-col gap-2">
               <Label for="newName" name="New Name" className="text-white" />

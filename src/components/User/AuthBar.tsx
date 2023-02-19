@@ -9,7 +9,7 @@ import useUserSubCheck from "../../lib/hooks/user/useUserSubCheck";
 const AuthBar: React.FC = () => {
   const { data: sessionData } = useSession();
 
-  const subscription = useUserSubCheck(sessionData?.user.id || "");
+  // const subscription = useUserSubCheck(sessionData?.user?.id || "");
 
   const [openMenu, setOpenMenu] = useState(false);
   const menuClass = "fixed top-0 bottom-0 right-0 w-full lg:w-96 backdrop-blur-lg border-l-2 bg-slate-900/90 transition-all delay-150 duration-500  ";
@@ -55,7 +55,7 @@ const AuthBar: React.FC = () => {
             </header>
             <div className="flex items-center justify-center gap-4">
               <p className="text-xl font-bold text-white">{sessionData.user?.name ? sessionData.user?.name : sessionData.user?.email}</p>
-              <Image src={sessionData.user.image || ""} alt={sessionData.user?.email || "User Avatar"} className="rounded-full" width={32} height={32} />
+              <Image src={sessionData.user?.image || ""} alt={sessionData.user?.email || "User Avatar"} className="rounded-full" width={32} height={32} />
             </div>
             <div className="mt-16 flex h-full flex-col items-center justify-start gap-2 font-bold text-white">
               <Link className="w-full border-t border-b bg-slate-900 px-8 py-6 transition hover:bg-slate-800 hover:text-white/90 hover:underline" href="/links">
