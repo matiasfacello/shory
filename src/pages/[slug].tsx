@@ -1,47 +1,59 @@
-import type { NextPage } from "next";
-import { useRouter } from "next/router";
-import { useEffect } from "react";
-import { env } from "../env/server.mjs";
+import type { NextPage, GetServerSidePropsContext } from "next";
+import requestIp from "request-ip";
+import geoip from "geoip-lite";
 
 import Head from "next/head.js";
 import Image from "next/image";
+import { prisma } from "../server/db";
 
-interface Context {
-  params: {
-    slug: string;
-  };
-}
-
-interface DataProps {
-  data: {
-    status: string;
-    url: string;
-  };
-}
-
-export async function getStaticPaths() {
-  return {
-    paths: [{ params: { slug: "*" } }],
-    fallback: true,
-  };
-}
-
-export const getStaticProps = async (context: Context) => {
-  const dir = env.NEXTAUTH_URL + "/api/link/" + context.params.slug;
-  const res = await fetch(dir);
-  const link = await res.json();
-
-  if (link.status == "error") {
-    const data = {
-      status: "error",
-      url: "/",
-    };
+export const getServerSideProps = async (context: GetServerSidePropsContext) => {
+  if (!context.params)
     return {
-      props: {
-        data,
+      redirect: {
+        destination: "/",
+        permanent: true,
       },
     };
-  }
+
+  const link = await prisma.sLink.findFirst({
+    where: {
+      slug: {
+        equals: context.params.slug as string,
+      },
+    },
+    select: {
+      id: true,
+      url: true,
+      slug: true,
+      utm_campaign: true,
+      utm_content: true,
+      utm_medium: true,
+      utm_source: true,
+      utm_term: true,
+    },
+  });
+
+  if (!link)
+    return {
+      redirect: {
+        destination: "/",
+        permanent: true,
+      },
+    };
+
+  const detectedIp = requestIp.getClientIp(context.req) || "::ffff:127.0.0.1";
+  const geoIp = detectedIp == "::ffff:127.0.0.1" ? geoip.lookup("190.227.13.2") : geoip.lookup(detectedIp);
+  const saveIp = JSON.stringify(geoIp);
+
+  await prisma.sLinkClicks.create({
+    data: {
+      slug: link.slug,
+      url: link.url,
+      linkId: link.id,
+      ip: detectedIp,
+      geo: saveIp,
+    },
+  });
 
   const linkSource = link.utm_source ? "&utm_source=" + link.utm_source : "";
   const linkCampaign = link.utm_campaign ? "&utm_campaign=" + link.utm_campaign : "";
@@ -50,28 +62,15 @@ export const getStaticProps = async (context: Context) => {
   const linkContent = link.utm_content ? "&utm_content=" + link.utm_content : "";
   const goTo = link.url + "/?" + linkSource + linkCampaign + linkMedium + linkTerm + linkContent;
 
-  const data = {
-    status: "success",
-    url: goTo,
-  };
   return {
-    props: {
-      data,
+    redirect: {
+      destination: goTo,
+      permanent: true,
     },
   };
 };
 
-const Link: NextPage<DataProps> = ({ data }) => {
-  const router = useRouter();
-
-  useEffect(() => {
-    if (data?.status === "success") {
-      router.push(data.url);
-    } else if (data?.status === "error") {
-      router.push(data.url);
-    }
-  }, [router, data]);
-
+const Link: NextPage = () => {
   return (
     <>
       <Head>
