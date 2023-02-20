@@ -1,3 +1,4 @@
+.env
 Dockerfile
 .dockerignore
 node_modules

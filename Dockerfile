@@ -28,22 +28,30 @@ COPY . .
 # Uncomment the following line in case you want to disable telemetry during the build.
 ENV NEXT_TELEMETRY_DISABLED 1
 
-ARG DATABASE_URL=DEFAULT_WRONG
-ENV DATABASE_URL=${DATABASE_URL}
-ARG DISCORD_CLIENT_ID=DEFAULT_WRONG
-ENV DISCORD_CLIENT_ID=${DISCORD_CLIENT_ID}
-ARG DISCORD_CLIENT_SECRET=DEFAULT_WRONG
-ENV DISCORD_CLIENT_SECRET=${DISCORD_CLIENT_SECRET}
-ARG NEXTAUTH_SECRET=DEFAULT_WRONG
-ENV NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
-ARG NEXTAUTH_URL=DEFAULT_WRONG
-ENV NEXTAUTH_URL=${NEXTAUTH_URL}
-ARG EMAIL_SERVER=DEFAULT_WRONG
-ENV EMAIL_SERVER=${EMAIL_SERVER}
-ARG EMAIL_FROM=DEFAULT_WRONG
-ENV EMAIL_FROM=${EMAIL_FROM}
+# ARG DATABASE_URL=DEFAULT_WRONG
+# ENV DATABASE_URL=${DATABASE_URL}
+# ARG DISCORD_CLIENT_ID=DEFAULT_WRONG
+# ENV DISCORD_CLIENT_ID=${DISCORD_CLIENT_ID}
+# ARG DISCORD_CLIENT_SECRET=DEFAULT_WRONG
+# ENV DISCORD_CLIENT_SECRET=${DISCORD_CLIENT_SECRET}
+# ARG NEXTAUTH_SECRET=DEFAULT_WRONG
+# ENV NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
+# ARG NEXTAUTH_URL=DEFAULT_WRONG
+# ENV NEXTAUTH_URL=${NEXTAUTH_URL}
+# ARG EMAIL_SERVER=DEFAULT_WRONG
+# ENV EMAIL_SERVER=${EMAIL_SERVER}
+# ARG EMAIL_FROM=DEFAULT_WRONG
+# ENV EMAIL_FROM=${EMAIL_FROM}
 
-RUN npm run build
+ARG SKIP_ENV_VALIDATION=SKIP_ENV_VALIDATION
+ENV SKIP_ENV_VALIDATION=1
+
+RUN \
+  if [ -f yarn.lock ]; then SKIP_ENV_VALIDATION=1 yarn build; \
+  elif [ -f package-lock.json ]; then SKIP_ENV_VALIDATION=1 npm run build; \
+  elif [ -f pnpm-lock.yaml ]; then yarn global add pnpm && SKIP_ENV_VALIDATION=1 pnpm run build; \
+  else echo "Lockfile not found." && exit 1; \
+  fi
 
 # Production image, copy all the files and run next
 FROM base AS runner
@@ -57,7 +65,9 @@ ENV NEXT_TELEMETRY_DISABLED 1
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
+COPY --from=builder /app/next.config.mjs ./
 COPY --from=builder /app/public ./public
+COPY --from=builder /app/package.json ./package.json
 
 # Automatically leverage output traces to reduce image size
 # https://nextjs.org/docs/advanced-features/output-file-tracing
