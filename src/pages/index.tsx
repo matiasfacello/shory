@@ -1,4 +1,4 @@
-import { type NextPage } from "next";
+import type { NextPage } from "next";
 import Head from "next/head";
 
 import Navbar from "../components/UI/Navbar";
