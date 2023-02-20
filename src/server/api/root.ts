@@ -1,8 +1,8 @@
-import { createTRPCRouter } from "./trpc";
-import { userRouter } from "./routers/user";
-import { subscriptionRouter } from "./routers/subscription";
-import { linkRouter } from "./routers/link";
-import { clicksRouter } from "./routers/clicks";
+import { createTRPCRouter } from "~/server/api/trpc";
+import { userRouter } from "~/server/api/routers/user";
+import { subscriptionRouter } from "~/server/api/routers/subscription";
+import { linkRouter } from "~/server/api/routers/link";
+import { clicksRouter } from "~/server/api/routers/clicks";
 
 /**
  * This is the primary router for your server.

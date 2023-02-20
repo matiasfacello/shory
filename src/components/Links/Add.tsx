@@ -1,14 +1,14 @@
 import { useSession, signIn } from "next-auth/react";
 import { useEffect, useState } from "react";
-import Label from "./atom/Label";
+import Label from "~/components/Links/atom/Label";
 import { Icon } from "@iconify-icon/react";
-import { rndString } from "../general/atoms/rndString";
+import { rndString } from "~/components/general/atoms/rndString";
 
-import useLinkCreate from "../../lib/hooks/links/useLinkCreate";
-import useLinkSlugCheck from "../../lib/hooks/links/useLinkSlugCheck";
-import useLinkCount from "../../lib/hooks/links/useLinkCount";
-import useUserSubCheck from "../../lib/hooks/user/useUserSubCheck";
-import { useLinkContext } from "../../lib/context/linkContext";
+import useLinkCreate from "~/lib/hooks/links/useLinkCreate";
+import useLinkSlugCheck from "~/lib/hooks/links/useLinkSlugCheck";
+import useLinkCount from "~/lib/hooks/links/useLinkCount";
+import useUserSubCheck from "~/lib/hooks/user/useUserSubCheck";
+import { useLinkContext } from "~/lib/context/linkContext";
 
 import type { FormEvent } from "react";
 import type { LinkType } from "link";

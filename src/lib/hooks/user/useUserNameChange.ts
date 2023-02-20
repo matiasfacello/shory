@@ -1,6 +1,6 @@
 // import { useSession } from "next-auth/react";
-import reloadSession from "../../../components/general/atoms/reloadSession";
-import { api } from "../../../utils/api";
+import reloadSession from "~/components/general/atoms/reloadSession";
+import { api } from "~/utils/api";
 
 const useUserNameChange = () => {
   return api.user.changeName.useMutation({

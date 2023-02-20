@@ -1,9 +1,9 @@
 import { useSession } from "next-auth/react";
 import { useState } from "react";
 
-import useUserDelete from "../../lib/hooks/user/useUserDelete";
+import useUserDelete from "~/lib/hooks/user/useUserDelete";
 
-import UserSettingsBox from "./atom/UserSettingsBox";
+import UserSettingsBox from "~/components/User/atom/UserSettingsBox";
 
 const DeleteUser: React.FC = () => {
   const { data: sessionData } = useSession();

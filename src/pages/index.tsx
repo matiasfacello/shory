@@ -1,10 +1,10 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 
-import Navbar from "../components/UI/Navbar";
-import LinkAdd from "../components/Links/Add";
-import LinkList from "../components/Links/ListForUser";
-import { LinkProvider } from "../lib/context/linkContext";
+import Navbar from "~/components/UI/Navbar";
+import LinkAdd from "~/components/Links/Add";
+import LinkList from "~/components/Links/ListForUser";
+import { LinkProvider } from "~/lib/context/linkContext";
 
 const Home: NextPage = () => {
   return (

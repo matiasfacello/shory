@@ -1,9 +1,9 @@
 import Image from "next/image";
-import logo from "../../../public/img/logo.svg";
+import logo from "~/../public/img/logo.svg";
 import Link from "next/link";
 
-import AuthBar from "../User/AuthBar";
-import NavbarLinks from "./widgets/NavbarLinks";
+import AuthBar from "~/components/User/AuthBar";
+import NavbarLinks from "~/components/UI/widgets/NavbarLinks";
 
 const Navbar: React.FC = () => {
   return (

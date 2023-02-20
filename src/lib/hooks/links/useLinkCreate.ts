@@ -1,4 +1,4 @@
-import { api } from "../../../utils/api";
+import { api } from "~/utils/api";
 
 const useLinkCreate = () => {
   const utils = api.useContext();

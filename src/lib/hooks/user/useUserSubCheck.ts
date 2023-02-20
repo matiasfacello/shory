@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { api } from "../../../utils/api";
+import { api } from "~/utils/api";
 
 interface Plan {
   name: string;

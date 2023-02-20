@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
 
-import useUserSubCheck from "../../lib/hooks/user/useUserSubCheck";
+// import useUserSubCheck from "~/lib/hooks/user/useUserSubCheck";
 
 const AuthBar: React.FC = () => {
   const { data: sessionData } = useSession();
@@ -75,7 +75,7 @@ const AuthBar: React.FC = () => {
         </>
       ) : (
         <>
-          <div>
+          <div className="w-1/6">
             <button className="rounded-full border border-white bg-slate-800 px-6 py-3 text-center font-semibold text-white no-underline transition hover:bg-slate-700" onClick={() => signIn()}>
               Login
             </button>

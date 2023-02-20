@@ -4,7 +4,7 @@ import geoip from "geoip-lite";
 
 import Head from "next/head.js";
 import Image from "next/image";
-import { prisma } from "../server/db";
+import { prisma } from "~/server/db";
 
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
   if (!context.params)

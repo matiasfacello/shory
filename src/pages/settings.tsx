@@ -3,9 +3,9 @@ import Router from "next/router";
 import { useSession } from "next-auth/react";
 import Head from "next/head";
 
-import Navbar from "../components/UI/Navbar";
-import ChangeUsername from "../components/User/ChangeUsername";
-import DeleteUser from "../components/User/DeteleUser";
+import Navbar from "~/components/UI/Navbar";
+import ChangeUsername from "~/components/User/ChangeUsername";
+import DeleteUser from "~/components/User/DeteleUser";
 
 const Settings: NextPage = () => {
   useSession({

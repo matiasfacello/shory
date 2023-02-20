@@ -1,4 +1,4 @@
-import { api } from "../../../utils/api";
+import { api } from "~/utils/api";
 
 const useLinkSlugCheck = (formSlug: string) => {
   return api.link.check.useQuery(

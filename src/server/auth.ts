@@ -3,8 +3,8 @@ import { getServerSession, type NextAuthOptions, type DefaultSession } from "nex
 import DiscordProvider from "next-auth/providers/discord";
 import EmailProvider from "next-auth/providers/email";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import { env } from "../env/server.mjs";
-import { prisma } from "./db";
+import { env } from "~/env/server.mjs";
+import { prisma } from "~/server/db";
 
 /**
  * Module augmentation for `next-auth` types

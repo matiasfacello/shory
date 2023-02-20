@@ -1,8 +1,8 @@
 import { useSession } from "next-auth/react";
-import { api } from "../../utils/api";
-import Item from "./widgets/Item";
+import { api } from "~/utils/api";
+import Item from "~/components/Links/widgets/Item";
 
-import { useLinkContext } from "../../lib/context/linkContext";
+import { useLinkContext } from "~/lib/context/linkContext";
 
 const LinkList: React.FC = () => {
   const { data: sessionData } = useSession();
