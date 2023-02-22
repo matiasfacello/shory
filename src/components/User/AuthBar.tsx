@@ -2,7 +2,7 @@ import { Icon } from "@iconify-icon/react";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 
 // import useUserSubCheck from "~/lib/hooks/user/useUserSubCheck";
 
@@ -13,7 +13,6 @@ const AuthBar: React.FC = () => {
 
   const [openMenu, setOpenMenu] = useState(false);
   const menuClass = "fixed top-0 bottom-0 right-0 w-full lg:w-96 backdrop-blur-lg border-l-2 bg-slate-900/90 transition-all delay-150 duration-500  ";
-  const drawerRef = useRef(null);
 
   useEffect(() => {
     document.body.addEventListener("click", () => {
@@ -41,7 +40,7 @@ const AuthBar: React.FC = () => {
               }}
             />
           </div>
-          <div className={openMenu ? menuClass + "" : menuClass + "translate-x-full"} ref={drawerRef} onClick={(e) => e.stopPropagation()}>
+          <div className={openMenu ? menuClass + "" : menuClass + "translate-x-full"} onClick={(e) => e.stopPropagation()}>
             <header className="flex items-center justify-end py-8 px-16">
               <Icon
                 icon="material-symbols:close"
