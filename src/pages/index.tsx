@@ -1,5 +1,6 @@
 import type { NextPage } from "next";
 import Head from "next/head";
+import { useSession } from "next-auth/react";
 
 import Navbar from "~/components/UI/Navbar";
 import LinkAdd from "~/components/Links/Add";
@@ -7,6 +8,8 @@ import LinkList from "~/components/Links/ListForUser";
 import { LinkProvider } from "~/lib/context/linkContext";
 
 const Home: NextPage = () => {
+  const { data: sessionData } = useSession();
+
   return (
     <>
       <Head>
@@ -19,7 +22,7 @@ const Home: NextPage = () => {
         <div className="container m-auto px-4 py-16">
           <LinkProvider>
             <LinkAdd />
-            <LinkList />
+            {sessionData && <LinkList />}
           </LinkProvider>
         </div>
       </main>
