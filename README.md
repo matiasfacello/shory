@@ -6,15 +6,19 @@
 
 - Features
 
-  - [ ] Limit free user posibilities
-  - [ ] Add premium user
-  - [ ] Tags sorting
+  - [x] Limit free user posibilities
   - [ ] Tree linking
+  - [ ] New Page for Link Adding
+  - [ ] New Page for Link List
+  - [ ] Tags sorting
+  - [ ] Add premium user
   - [ ] Localization
+  - [ ] Link Statistics
   - [ ] Amazon, best buy, etc
 
 - User Handling
-  - [ ] New login page
+  - [ ] Payment proccesing
+  - [x] New login page
   - [x] Change User Name
   - [x] Delete Account
   - [x] Add multiple providers
