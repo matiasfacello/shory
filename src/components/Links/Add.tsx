@@ -3,7 +3,9 @@ import { useEffect, useState } from "react";
 import Label from "~/components/Links/atom/Label";
 import { Icon } from "@iconify-icon/react";
 import { rndString } from "~/components/general/atoms/rndString";
+import { formatTags } from "../general/atoms/formatTags";
 
+import useLinkGetAll from "~/lib/hooks/links/useLinkGetAll";
 import useLinkCreate from "~/lib/hooks/links/useLinkCreate";
 import useLinkSlugCheck from "~/lib/hooks/links/useLinkSlugCheck";
 import useLinkCount from "~/lib/hooks/links/useLinkCount";
@@ -30,6 +32,8 @@ const LinkAdd: React.FC = () => {
   const linkCount = useLinkCount(sessionData?.user?.id || "");
   const [linkFull, setLinkFull] = useState(false);
 
+  const { tagList } = useLinkGetAll(sessionData?.user?.id || "");
+
   useEffect(() => {
     if (linkCount.data && subCheck) {
       if (linkCount.data >= subCheck.linkQuota) {
@@ -45,6 +49,21 @@ const LinkAdd: React.FC = () => {
   const handleChangeSlug = (event: React.SyntheticEvent<HTMLInputElement>) => {
     setFormLink({ ...formLink, [event.currentTarget.name]: event.currentTarget.value });
     slugCheck.refetch();
+  };
+
+  const handleTagChange = (event: React.SyntheticEvent<HTMLInputElement>) => {
+    setFormLink({ ...formLink, [event.currentTarget.name]: formatTags(event.currentTarget.value.replace(/[^A-Za-z0-9,_-]/g, "")) });
+  };
+
+  const handleTag = (tag: string) => {
+    if (formLink.tags?.includes(tag)) return;
+    else if (formLink.tags == null) {
+      const newTag = tag;
+      setFormLink({ ...formLink, tags: newTag });
+    } else {
+      const newTag = formatTags(formLink.tags + " " + tag);
+      setFormLink({ ...formLink, tags: newTag });
+    }
   };
 
   const mutation = useLinkCreate();
@@ -69,7 +88,7 @@ const LinkAdd: React.FC = () => {
       slug: formLink.slug,
       url: formLink.url,
       userId: sessionData?.user?.id,
-      tags: formLink.tags || null,
+      tags: formLink.tags ? formatTags(formLink.tags) : null,
       utm_source: formLink.utm_source || null,
       utm_campaign: formLink.utm_campaign || null,
       utm_medium: formLink.utm_medium || null,
@@ -110,8 +129,18 @@ const LinkAdd: React.FC = () => {
         <div className="my-4 flex flex-wrap justify-center gap-4 px-4">
           <div className="flex flex-[1_0_150px] flex-col">
             <Label for="tags" name="Tags" className="text-white" />
-            <input className="p-2 " type="text" id="tags" name="tags" onChange={handleChange} value={formLink.tags || ""} placeholder="tags" />
+            <input className="p-2 " type="text" id="tags" name="tags" onChange={handleTagChange} value={formLink.tags || ""} placeholder="tags" />
+            <div className="mt-2 flex flex-wrap gap-3">
+              {tagList &&
+                tagList.map((tag) => (
+                  <div className="cursor-pointer rounded-full bg-slate-100 py-2 px-3 text-xs font-medium" key={tag} onClick={() => handleTag(tag)}>
+                    {tag}
+                  </div>
+                ))}
+            </div>
           </div>
+        </div>
+        <div className="my-4 flex flex-wrap justify-center gap-4 px-4">
           <div className="flex flex-[1_0_150px] flex-col">
             <Label for="utm_source" name="UTM Source" className="text-white" />
             <input className="p-2 " type="text" id="utm_source" name="utm_source" onChange={handleChange} value={formLink.utm_source || ""} placeholder="referrer: google, instagram" />

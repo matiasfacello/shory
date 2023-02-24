@@ -3,6 +3,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { Icon } from "@iconify-icon/react";
 import { api } from "../../../utils/api";
+import { formatTags } from "~/components/general/atoms/formatTags";
 
 import type { LinkInDBType } from "link";
 import type { FormEvent } from "react";
@@ -96,6 +97,10 @@ const Item = (link: LinkInDBType) => {
 
   const handleChange = (event: React.SyntheticEvent<HTMLInputElement>) => {
     setFormEdit({ ...formEdit, [event.currentTarget.name]: event.currentTarget.value });
+  };
+
+  const handleTagChange = (event: React.SyntheticEvent<HTMLInputElement>) => {
+    setFormEdit({ ...formEdit, [event.currentTarget.name]: formatTags(event.currentTarget.value.replace(/[^A-Za-z0-9,_-]/g, "")) });
   };
 
   const editing = useLinkEdit();
@@ -246,7 +251,7 @@ const Item = (link: LinkInDBType) => {
               <div className="mb-6 flex flex-wrap justify-center gap-4">
                 <div className="flex flex-[1_1_300px] flex-col">
                   <Label for="tags" name="Tags" />
-                  <input className="rounded border bg-stone-100 p-2 shadow" type="text" id="tags" name="tags" onChange={handleChange} value={formEdit.tags} placeholder="Tags" />
+                  <input className="rounded border bg-stone-100 p-2 shadow" type="text" id="tags" name="tags" onChange={handleTagChange} value={formEdit.tags} placeholder="Tags" />
                 </div>
                 <div className="flex flex-[1_1_300px] flex-col">
                   <Label for="utm_source" name="UTM Source" />
