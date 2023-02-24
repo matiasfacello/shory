@@ -1,3 +1,9 @@
+/**
+ * Function to generate a random string
+ *
+ * @param length Defines the length of the string.
+ * @param number Define if the string should include numbers too.
+ */
 export const rndString = (length: number, number?: boolean) => {
   let result = "";
   const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
