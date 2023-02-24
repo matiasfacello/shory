@@ -7,10 +7,12 @@
 - Features
 
   - [x] Limit free user posibilities
+  - [ ] Share Link
+  - [ ] QR Generator
   - [ ] Tree linking
   - [ ] New Page for Link Adding
   - [ ] New Page for Link List
-  - [ ] Tags sorting
+  - [x] Tags sorting
   - [ ] Add premium user
   - [ ] Localization
   - [ ] Link Statistics
