@@ -17,19 +17,15 @@ import useLinkEdit from "../../../lib/hooks/links/useLinkEdit";
 const Item = (link: LinkInDBType) => {
   const { data: sessionData } = useSession();
 
-  const userId = sessionData?.user?.id || "";
-
-  const classButt = "w-full border-slate-600 px-2 py-2 text-sm font-medium shadow hover:bg-stone-300  ";
-
-  const [showStats, setShowStats] = useState(false);
-  const classStats = showStats ? "bg-stone-400" : "bg-stone-200";
-
   const hideBoxes = () => {
     setShowStats(false);
     setShowUTM(false);
     setShowDelete(false);
     setShowEdit(false);
   };
+
+
+  const [showStats, setShowStats] = useState(false);
 
   const handleStats = () => {
     if (showStats) {
@@ -41,7 +37,6 @@ const Item = (link: LinkInDBType) => {
   };
 
   const [showUTM, setShowUTM] = useState(false);
-  const classUTM = showUTM ? "bg-stone-400" : "bg-stone-200";
 
   const handleUTM = () => {
     if (showUTM) {
@@ -53,7 +48,6 @@ const Item = (link: LinkInDBType) => {
   };
 
   const [showEdit, setShowEdit] = useState(false);
-  const classEdit = showEdit ? "bg-stone-400" : "bg-stone-200";
 
   const handleEdit = () => {
     if (showEdit) {
@@ -65,7 +59,6 @@ const Item = (link: LinkInDBType) => {
   };
 
   const [showDelete, setShowDelete] = useState(false);
-  const classDelete = showDelete ? "bg-stone-400" : "bg-stone-200";
 
   const handleDelete = () => {
     if (showDelete) {
@@ -138,17 +131,9 @@ const Item = (link: LinkInDBType) => {
   const ConfirmDelete = (link: LinkInDBType) => {
     removing.mutate({
       slug: link.slug,
-      user: userId,
+      user: sessionData?.user?.id || "",
     });
   };
-
-  // Form link to Visit
-  const linkSource = link.utm_source ? "&utm_source=" + link.utm_source : "";
-  const linkCampaign = link.utm_campaign ? "&utm_campaign=" + link.utm_campaign : "";
-  const linkMedium = link.utm_medium ? "&utm_medium=" + link.utm_medium : "";
-  const linkTerm = link.utm_term ? "&utm_term=" + link.utm_term : "";
-  const linkContent = link.utm_content ? "&utm_content=" + link.utm_content : "";
-  const goTo = link.url + "/?" + linkSource + linkCampaign + linkMedium + linkTerm + linkContent;
 
   return (
     <>
@@ -161,19 +146,19 @@ const Item = (link: LinkInDBType) => {
           <p className="text-sm">Tags: {link.tags ? link.tags : "none."}</p>
         </div>
         <div className="grid w-full grid-cols-3 text-center md:w-6/12 md:gap-x-4 md:gap-y-3 md:p-3">
-          <Link href={goTo} target="_blank">
-            <button className={classButt + "bg-stone-200"}>Link</button>
-          </Link>
-          <button className={classButt + classStats} onClick={handleStats}>
+          <button className={`w-full border-slate-600 px-2 py-2 text-sm font-medium shadow hover:bg-stone-300 ${showShare ? "bg-stone-400" : "bg-stone-200"}`} onClick={handleShare}>
+            Share
+          </button>
+          <button className={`w-full border-slate-600 px-2 py-2 text-sm font-medium shadow hover:bg-stone-300 ${showStats ? "bg-stone-400" : "bg-stone-200"}`} onClick={handleStats}>
             Stats
           </button>
-          <button className={classButt + classUTM} onClick={handleUTM}>
+          <button className={`w-full border-slate-600 px-2 py-2 text-sm font-medium shadow hover:bg-stone-300 ${showUTM ? "bg-stone-400" : "bg-stone-200"}`} onClick={handleUTM}>
             UTM
           </button>
-          <button className={classButt + classEdit} onClick={handleEdit}>
+          <button className={`w-full border-slate-600 px-2 py-2 text-sm font-medium shadow hover:bg-stone-300 ${showEdit ? "bg-stone-400" : "bg-stone-200"}`} onClick={handleEdit}>
             Edit
           </button>
-          <button className={classButt + classDelete} onClick={handleDelete}>
+          <button className={`w-full border-slate-600 px-2 py-2 text-sm font-medium shadow hover:bg-stone-300 ${showDelete ? "bg-stone-400" : "bg-stone-200"}`} onClick={handleDelete}>
             Delete
           </button>
         </div>
@@ -185,7 +170,7 @@ const Item = (link: LinkInDBType) => {
               setShowStats(false);
             }}
           >
-            <p className="p-1 text-center">{stats ? stats.map((stat, i) => <StatItem {...stat} index={i + 1} key={stat.id} />) : <p className="text-xl">No clicks yet.</p>}</p>
+            <div className="p-1 text-center">{stats ? stats.map((stat, i) => <StatItem {...stat} index={i + 1} key={stat.id} />) : <p className="text-xl">No clicks yet.</p>}</div>
           </LinkBoxes>
         )}
 

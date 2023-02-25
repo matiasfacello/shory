@@ -22,7 +22,7 @@ const LinkList: React.FC = () => {
       ) : linkList && linkList?.length > 0 ? (
         <>
           <h2 className="py-8 text-center text-4xl font-bold">Your links</h2>
-          <div className="flex items-center justify-center gap-4">
+          <div className="mx-auto flex max-w-3xl flex-wrap items-center justify-center gap-x-4 gap-y-2">
             <div
               className={`cursor-pointer rounded-full py-2 px-4 text-sm transition ${filterTag === null ? "bg-red-300 font-bold" : "bg-red-200 font-medium"}`}
               onClick={() => {
