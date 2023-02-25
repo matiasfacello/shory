@@ -1,3 +1,4 @@
+import { env } from "~/env.mjs";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
 import Link from "next/link";
@@ -18,12 +19,23 @@ const Item = (link: LinkInDBType) => {
   const { data: sessionData } = useSession();
 
   const hideBoxes = () => {
+    setShowShare(false);
     setShowStats(false);
     setShowUTM(false);
     setShowDelete(false);
     setShowEdit(false);
   };
 
+  const [showShare, setShowShare] = useState(false);
+
+  const handleShare = () => {
+    if (showShare) {
+      setShowShare(false);
+    } else {
+      hideBoxes();
+      setShowShare(true);
+    }
+  };
 
   const [showStats, setShowStats] = useState(false);
 
@@ -67,6 +79,28 @@ const Item = (link: LinkInDBType) => {
       hideBoxes();
       setShowDelete(true);
     }
+  };
+
+  const [copyShared, setCopyShared] = useState<boolean>(false);
+
+  const goTo = {
+    url: env.NEXT_PUBLIC_HOST + "/" + link.slug,
+    whatsapp: "https://web.whatsapp.com/send/?type=custom_url&app_absent=0&text=" + env.NEXT_PUBLIC_HOST.replace(/[:]/g, "%3A").replace(/[\/]/g, "%2F") + "%2F" + link.slug,
+  };
+
+  const handleShareCopy = () => {
+    setCopyShared(true);
+
+    navigator.clipboard.writeText(goTo.url);
+    setTimeout(() => setCopyShared(false), 4000);
+  };
+
+  const handleShareWidget = () => {
+    const data = {
+      title: "Redirects to " + link.slug.toUpperCase(),
+      url: goTo.url,
+    };
+    navigator.share(data);
   };
 
   const { data: stats } = api.clicks.getLinkFromUser.useQuery(
@@ -162,6 +196,31 @@ const Item = (link: LinkInDBType) => {
             Delete
           </button>
         </div>
+
+        {showShare && (
+          <LinkBoxes
+            title="Share"
+            closeButton={() => {
+              setShowShare(false);
+            }}
+          >
+            <div className="flex flex-wrap items-center  justify-center gap-4">
+              <Link
+                href={goTo.whatsapp}
+                target="_blank"
+                className="flex h-12 w-16 items-center justify-center rounded border-slate-600 bg-stone-200 px-4 py-2 text-sm font-medium shadow hover:bg-stone-300"
+              >
+                <Icon icon="ic:round-whatsapp" width="32" height="32" />
+              </Link>
+              <button className="h-12 w-48 rounded border-slate-600 bg-stone-200 px-4 py-2 text-sm font-medium shadow hover:bg-stone-300" onClick={handleShareCopy}>
+                {copyShared ? "Copied!" : "Copy to Clipboard"}
+              </button>
+              <button className="h-12 w-48 rounded border-slate-600 bg-stone-200 px-4 py-2 text-sm font-medium shadow hover:bg-stone-300" onClick={handleShareWidget}>
+                Share Widget
+              </button>
+            </div>
+          </LinkBoxes>
+        )}
 
         {showStats && (
           <LinkBoxes
