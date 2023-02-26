@@ -96,8 +96,12 @@ model SLinkClicks {
   link      SLink    @relation(fields: [linkId], references: [id], onDelete: Cascade)
   slug      String
   url       String   @db.VarChar(2000)
-  ip        String?
-  geo       String?
+  country   String?
+  region    String?
+  city      String?
+  eurozone  String?
+  timezone  String?
+  area      Int?
 }
 
 model Plans {

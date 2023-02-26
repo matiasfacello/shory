@@ -9,8 +9,12 @@ export const clicksRouter = createTRPCRouter({
         linkId: z.number(),
         slug: z.string().min(1),
         url: z.string().min(1),
-        ip: z.string().nullable(),
-        geo: z.string().nullable(),
+        country: z.string().nullable(),
+        region: z.string().nullable(),
+        city: z.string().nullable(),
+        eurozone: z.string().nullable(),
+        timezone: z.string().nullable(),
+        area: z.number().nullable(),
       })
     )
     .mutation(async ({ ctx, input }) => {

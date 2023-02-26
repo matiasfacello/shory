@@ -1,10 +1,13 @@
 import type { NextPage, GetServerSidePropsContext } from "next";
 import requestIp from "request-ip";
 import geoip from "geoip-lite";
+import { Country, State } from "country-state-city";
+import { formatLink } from "~/components/general/atoms/formatLink";
 
 import Head from "next/head.js";
 import Image from "next/image";
 import { prisma } from "~/server/db";
+import { env } from "~/env.mjs";
 
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
   if (!context.params)
@@ -21,16 +24,6 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
         equals: context.params.slug as string,
       },
     },
-    select: {
-      id: true,
-      url: true,
-      slug: true,
-      utm_campaign: true,
-      utm_content: true,
-      utm_medium: true,
-      utm_source: true,
-      utm_term: true,
-    },
   });
 
   if (!link)
@@ -41,26 +34,24 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
       },
     };
 
-  const detectedIp = requestIp.getClientIp(context.req) || "::ffff:127.0.0.1";
-  const geoIp = detectedIp == "::ffff:127.0.0.1" ? geoip.lookup("190.227.13.2") : geoip.lookup(detectedIp);
-  const saveIp = JSON.stringify(geoIp);
+  const detectedIp = requestIp.getClientIp(context.req) || "";
+  const geoIp = env.NODE_ENV == "production" ? geoip.lookup(detectedIp) : geoip.lookup("190.181.191.255"); // Random IP for testing purposes
+
+  const goTo = formatLink(link);
 
   await prisma.sLinkClicks.create({
     data: {
       slug: link.slug,
-      url: link.url,
+      url: goTo,
       linkId: link.id,
-      ip: detectedIp,
-      geo: saveIp,
+      country: Country.getCountryByCode(geoIp?.country || "")?.name || null,
+      region: State.getStateByCodeAndCountry(geoIp?.region || "", geoIp?.country || "")?.name || null,
+      city: geoIp?.city || null,
+      eurozone: geoIp?.eu || null,
+      timezone: geoIp?.timezone || null,
+      area: geoIp?.area || null,
     },
   });
-
-  const linkSource = link.utm_source ? "&utm_source=" + link.utm_source : "";
-  const linkCampaign = link.utm_campaign ? "&utm_campaign=" + link.utm_campaign : "";
-  const linkMedium = link.utm_medium ? "&utm_medium=" + link.utm_medium : "";
-  const linkTerm = link.utm_term ? "&utm_term=" + link.utm_term : "";
-  const linkContent = link.utm_content ? "&utm_content=" + link.utm_content : "";
-  const goTo = link.url + "/?" + linkSource + linkCampaign + linkMedium + linkTerm + linkContent;
 
   return {
     redirect: {
