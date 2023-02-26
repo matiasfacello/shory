@@ -7,7 +7,9 @@
 - Features
 
   - [x] Limit free user posibilities
-  - [ ] Share Link
+  - [x] Share Link
+  - [ ] Cookies Consent with toggleable page
+  - [ ] Terms and Conditions / Privacy Policy
   - [ ] QR Generator
   - [ ] Tree linking
   - [ ] New Page for Link Adding
