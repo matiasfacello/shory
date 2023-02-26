@@ -6,7 +6,7 @@ import { Icon } from "@iconify-icon/react";
 import { api } from "../../../utils/api";
 import { formatTags } from "~/components/general/atoms/formatTags";
 
-import type { LinkInDBType } from "link";
+import type { SLink } from "@prisma/client";
 import type { FormEvent } from "react";
 
 import Label from "../atom/Label";
@@ -15,7 +15,7 @@ import StatItem from "../atom/StatItem";
 import useLinkRemove from "../../../lib/hooks/links/useLinkRemove";
 import useLinkEdit from "../../../lib/hooks/links/useLinkEdit";
 
-const Item = (link: LinkInDBType) => {
+const Item = (link: SLink) => {
   const { data: sessionData } = useSession();
 
   const hideBoxes = () => {
@@ -162,7 +162,7 @@ const Item = (link: LinkInDBType) => {
 
   const removing = useLinkRemove();
 
-  const ConfirmDelete = (link: LinkInDBType) => {
+  const ConfirmDelete = (link: SLink) => {
     removing.mutate({
       slug: link.slug,
       user: sessionData?.user?.id || "",
