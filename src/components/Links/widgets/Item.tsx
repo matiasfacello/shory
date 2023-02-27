@@ -18,6 +18,9 @@ import useLinkEdit from "../../../lib/hooks/links/useLinkEdit";
 const Item = (link: SLink) => {
   const { data: sessionData } = useSession();
 
+  /**
+   * States for opening and closing boxes
+   */
   const hideBoxes = () => {
     setShowShare(false);
     setShowStats(false);
@@ -81,6 +84,9 @@ const Item = (link: SLink) => {
     }
   };
 
+  /**
+   * Share Button Logic
+   */
   const [copyShared, setCopyShared] = useState<boolean>(false);
 
   const goTo = {
@@ -103,6 +109,9 @@ const Item = (link: SLink) => {
     navigator.share(data);
   };
 
+  /**
+   * Stats Button Logic
+   */
   const { data: stats } = api.clicks.getLinkFromUser.useQuery(
     {
       linkId: link.id || 0,
@@ -110,6 +119,9 @@ const Item = (link: SLink) => {
     { enabled: sessionData?.user !== undefined }
   );
 
+  /**
+   * Edit Button Logic
+   */
   const [formEdit, setFormEdit] = useState({
     id: link.id || 0,
     slug: link.slug || "",
@@ -160,6 +172,9 @@ const Item = (link: SLink) => {
     setShowEdit(false);
   };
 
+  /**
+   * Delete Button Logic
+   */
   const removing = useLinkRemove();
 
   const ConfirmDelete = (link: SLink) => {
