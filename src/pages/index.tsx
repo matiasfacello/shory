@@ -1,14 +1,19 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import { useSession } from "next-auth/react";
+import useCookies from "~/lib/hooks/general/useCookies";
 
 import Navbar from "~/components/UI/Navbar";
+import Footer from "~/components/UI/Footer";
+import Cookies from "~/components/UI/widgets/Cookies";
 import LinkAdd from "~/components/Links/Add";
 import LinkList from "~/components/Links/ListForUser";
 import { LinkProvider } from "~/lib/context/linkContext";
 
 const Home: NextPage = () => {
   const { data: sessionData } = useSession();
+
+  const showCookies = useCookies();
 
   return (
     <>
@@ -24,8 +29,10 @@ const Home: NextPage = () => {
             <LinkAdd />
             {sessionData && <LinkList />}
           </LinkProvider>
+          {!showCookies.knows && <Cookies showCookies={!showCookies.knows} />}
         </div>
       </main>
+      <Footer />
     </>
   );
 };
