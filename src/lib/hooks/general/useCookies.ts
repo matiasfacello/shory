@@ -21,8 +21,6 @@ const useCookies = () => {
     });
   }, [fillerCookies, emptyCookies]);
 
-  console.log("cookiesObject", cookiesObject);
-
   return cookiesObject;
 };
 

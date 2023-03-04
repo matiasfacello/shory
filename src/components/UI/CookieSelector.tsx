@@ -10,9 +10,6 @@ const CookieSelector: React.FC = () => {
   const [loaded, setLoaded] = useState<boolean>(false);
   const [acceptsAll, setAcceptsAll] = useState<boolean>();
 
-  console.log(localCookies);
-  console.warn(acceptsAll);
-
   useEffect(() => {
     setAcceptsAll(localCookies?.acceptsAll);
     setLoaded(true);
