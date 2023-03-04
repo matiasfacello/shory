@@ -37,10 +37,23 @@
     - [x] Delete Account
     - [x] Add multiple providers
 
-- Difference between free users and premium users
-  - Free users
-  - Standard Premium users
-  - Premium Premium users
+## Plan Comparison
+
+| Links           |   Free    | Standard  |  Premium  |
+| :-------------- | :-------: | :-------: | :-------: |
+| Link Quantity   |    10     |    200    |   1000    |
+| Clicks Quantity | Unlimited | Unlimited | Unlimited |
+| Link Schedule   |     -     |   **X**   |   **X**   |
+| Statistics      |     -     |   Basic   | Advanced  |
+| QR Generator    |     -     |   **X**   |   **X**   |
+
+| Tree           |   Free    | Standard  |  Premium  |
+| :------------- | :-------: | :-------: | :-------: |
+| Tree Quantity  |     1     |    10     |    100    |
+| Links in tree  | Unlimited | Unlimited | Unlimited |
+| Statistics     |     -     |   Basic   | Advanced  |
+| QR Generator   |     -     |   **X**   |   **X**   |
+| Hide Watermark |     -     |     -     |   **X**   |
 
 ---
 
