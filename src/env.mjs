@@ -57,16 +57,21 @@ const processEnv = {
 // --------------------------
 
 const merged = server.merge(client);
-/** @type z.infer<merged>
- *  @ts-ignore - can't type this properly in jsdoc */
-let env = process.env;
+
+/** @typedef {z.input<typeof merged>} MergedInput */
+/** @typedef {z.infer<typeof merged>} MergedOutput */
+/** @typedef {z.SafeParseReturnType<MergedInput, MergedOutput>} MergedSafeParseReturn */
+
+let env = /** @type {MergedOutput} */ (process.env);
 
 if (!!process.env.SKIP_ENV_VALIDATION == false) {
   const isServer = typeof window === "undefined";
 
-  const parsed = isServer
-    ? merged.safeParse(processEnv) // on server we can validate all env vars
-    : client.safeParse(processEnv); // on client we can only validate the ones that are exposed
+  const parsed = /** @type {MergedSafeParseReturn} */ (
+    isServer
+      ? merged.safeParse(processEnv) // on server we can validate all env vars
+      : client.safeParse(processEnv) // on client we can only validate the ones that are exposed
+  );
 
   if (parsed.success === false) {
     console.error("❌ Invalid environment variables:", parsed.error.flatten().fieldErrors);
@@ -87,7 +92,7 @@ if (!!process.env.SKIP_ENV_VALIDATION == false) {
             : `❌ Attempted to access server-side environment variable '${prop}' on the client`
         );
       /*  @ts-ignore - can't type this properly in jsdoc */
-      return target[prop];
+      return target[/** @type {keyof typeof target} */ (prop)];
     },
   });
 }
