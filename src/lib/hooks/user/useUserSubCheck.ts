@@ -5,6 +5,7 @@ interface Plan {
   name: string;
   title: string;
   linkQuota: number;
+  canCreateLink: boolean;
   starts?: Date;
   ends?: Date;
 }
@@ -12,30 +13,34 @@ interface Plan {
 const useUserSubCheck = (id: string) => {
   const [info, setInfo] = useState<Plan>();
 
-  const subscription = api.subscription.get.useQuery({ userId: id });
-
-  const response = api.subscription.getPlan.useQuery({ name: "tier0" });
+  const { data: subscription } = api.subscription.get.useQuery({ userId: id });
+  const { data: freePlan } = api.subscription.getPlan.useQuery({ name: "tier0" });
+  const { data: linkCount } = api.link.count.useQuery({ userId: id });
 
   useEffect(() => {
+    if (!linkCount) return;
+
     //Checks if user has active subscription
-    if (subscription.data) {
+    if (subscription) {
       setInfo({
-        name: subscription.data.plans.name,
-        title: subscription.data.plans.title,
-        linkQuota: subscription.data.plans.linkQuota,
-        starts: subscription.data.startDate,
-        ends: subscription.data.endDate,
+        name: subscription.plans.name,
+        title: subscription.plans.title,
+        linkQuota: subscription.plans.linkQuota,
+        canCreateLink: linkCount < subscription.plans.linkQuota ? true : false,
+        starts: subscription.startDate,
+        ends: subscription.endDate,
       });
     }
     // else returns free plan
-    else if (response.data) {
+    else if (freePlan) {
       setInfo({
-        name: response.data.name,
-        title: response.data.title,
-        linkQuota: response.data.linkQuota,
+        name: freePlan.name,
+        title: freePlan.title,
+        linkQuota: freePlan.linkQuota,
+        canCreateLink: linkCount < freePlan.linkQuota ? true : false,
       });
     }
-  }, [response.data, subscription.data]);
+  }, [freePlan, subscription, linkCount]);
 
   return info;
 };
