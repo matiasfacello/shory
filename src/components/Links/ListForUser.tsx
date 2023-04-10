@@ -4,12 +4,8 @@ import Item from "~/components/Links/widgets/Item";
 
 import useLinkGetAll from "~/lib/hooks/links/useLinkGetAll";
 
-import { useLinkContext } from "~/lib/context/linkContext";
-
 const LinkList: React.FC = () => {
   const { data: sessionData } = useSession();
-
-  const { isLoadingMutation } = useLinkContext();
 
   const { tagList, linkList } = useLinkGetAll(sessionData?.user?.id || "");
 
@@ -17,9 +13,7 @@ const LinkList: React.FC = () => {
 
   return (
     <div className="mx-auto my-16 grid max-w-7xl grid-cols-1 items-center justify-center gap-6 rounded bg-white p-4 text-black">
-      {isLoadingMutation ? (
-        <h2 className="py-8 text-center text-4xl font-bold">Loading</h2>
-      ) : linkList && linkList?.length > 0 ? (
+      {linkList && linkList?.length > 0 ? (
         <>
           <h2 className="py-8 text-center text-4xl font-bold">Your links</h2>
           <div className="mx-auto flex max-w-3xl flex-wrap items-center justify-center gap-x-4 gap-y-2">
