@@ -3,12 +3,13 @@ import { z } from "zod";
 
 export const linkRouter = createTRPCRouter({
   // PUBLIC PROCEDURES -------------------------------- //
-  check: publicProcedure.input(z.object({ slug: z.string() })).query(({ ctx, input }) => {
-    return ctx.prisma.sLink.count({
+  check: publicProcedure.input(z.object({ slug: z.string() })).query(async ({ ctx, input }) => {
+    const count = await ctx.prisma.sLink.count({
       where: {
         slug: input.slug,
       },
     });
+    return { used: count > 0 };
   }),
 
   get: publicProcedure.input(z.object({ slug: z.string() })).query(({ ctx, input }) => {
