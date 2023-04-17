@@ -59,6 +59,7 @@
 
 Bootstraped with [T3 Stack](https://create.t3.gg/)
 
-Update Changelog from T3
-Apr 17 - [#1a8a97e](https://github.com/t3-oss/create-t3-app/commit/1a8a97e42b8991596fc70e50dd6870c987a59075)
-Apr 1 - [#2cb41e6](https://github.com/t3-oss/create-t3-app/commit/2cb41e676f01d4e8bfb8c7fc41bf0d5c4a1c0689)
+### Update Changelog from T3
+
+- 2023/04/17 - [#1a8a97e](https://github.com/t3-oss/create-t3-app/commit/1a8a97e42b8991596fc70e50dd6870c987a59075)
+- 2023/04/01 - [#2cb41e6](https://github.com/t3-oss/create-t3-app/commit/2cb41e676f01d4e8bfb8c7fc41bf0d5c4a1c0689)
