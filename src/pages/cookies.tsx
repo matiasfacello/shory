@@ -1,8 +1,7 @@
 import PageLayout from "~/components/general/PageLayout";
 import CookieSelector from "~/components/UI/CookieSelector";
-import type { NextPage } from "next";
 
-const Settings: NextPage = () => {
+export default function Settings() {
   return (
     <>
       <PageLayout>
@@ -12,6 +11,4 @@ const Settings: NextPage = () => {
       </PageLayout>
     </>
   );
-};
-
-export default Settings;
+}

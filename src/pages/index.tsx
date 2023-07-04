@@ -2,10 +2,9 @@ import PageLayout from "~/components/general/PageLayout";
 import LinkList from "~/components/Links/ListForUser";
 import Cookies from "~/components/UI/widgets/Cookies";
 import useCookies from "~/lib/hooks/general/useCookies";
-import type { NextPage } from "next";
 import { useSession } from "next-auth/react";
 
-const Home: NextPage = () => {
+export default function Home() {
   const { data: sessionData } = useSession();
 
   const showCookies = useCookies();
@@ -20,6 +19,4 @@ const Home: NextPage = () => {
       </PageLayout>
     </>
   );
-};
-
-export default Home;
+}

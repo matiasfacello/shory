@@ -1,11 +1,10 @@
 import PageLayout from "~/components/general/PageLayout";
 import ChangeUsername from "~/components/User/ChangeUsername";
 import DeleteUser from "~/components/User/DeteleUser";
-import type { NextPage } from "next";
 import { useSession } from "next-auth/react";
 import Router from "next/router";
 
-const Settings: NextPage = () => {
+export default function Settings() {
   useSession({
     required: true,
     onUnauthenticated() {
@@ -23,6 +22,4 @@ const Settings: NextPage = () => {
       </PageLayout>
     </>
   );
-};
-
-export default Settings;
+}

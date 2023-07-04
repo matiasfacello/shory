@@ -3,7 +3,7 @@ import { env } from "~/env.mjs";
 import { prisma } from "~/server/db";
 import { Country, State } from "country-state-city";
 import geoip from "geoip-lite";
-import type { GetServerSidePropsContext, NextPage } from "next";
+import type { GetServerSidePropsContext } from "next";
 import Head from "next/head.js";
 import Image from "next/image";
 import requestIp from "request-ip";
@@ -60,7 +60,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
   };
 };
 
-const Link: NextPage = () => {
+export default function Link() {
   return (
     <>
       <Head>
@@ -74,6 +74,4 @@ const Link: NextPage = () => {
       </div>
     </>
   );
-};
-
-export default Link;
+}

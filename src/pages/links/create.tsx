@@ -2,9 +2,8 @@ import PageLayout from "~/components/general/PageLayout";
 import LinkAdd from "~/components/Links/Add";
 import Cookies from "~/components/UI/widgets/Cookies";
 import useCookies from "~/lib/hooks/general/useCookies";
-import type { NextPage } from "next";
 
-const Home: NextPage = () => {
+export default function Home() {
   const showCookies = useCookies();
 
   return (
@@ -17,6 +16,4 @@ const Home: NextPage = () => {
       </PageLayout>
     </>
   );
-};
-
-export default Home;
+}
