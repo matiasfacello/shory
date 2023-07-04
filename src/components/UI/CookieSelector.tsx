@@ -1,9 +1,8 @@
-import { useEffect, useState } from "react";
 import UserSettingsBox from "~/components/User/atom/UserSettingsBox";
 import useCookies from "~/lib/hooks/general/useCookies";
-import Image from "next/image";
-
 import type { CookiesType } from "cookies";
+import Image from "next/image";
+import { useEffect, useState } from "react";
 
 const CookieSelector: React.FC = () => {
   const localCookies = useCookies();

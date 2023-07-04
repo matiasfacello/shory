@@ -1,6 +1,6 @@
-import AuthBar from "~/components/User/AuthBar";
-import NavbarLinks from "~/components/UI/widgets/NavbarLinks";
 import Logo from "~/components/UI/widgets/Logo";
+import NavbarLinks from "~/components/UI/widgets/NavbarLinks";
+import AuthBar from "~/components/User/AuthBar";
 
 const Navbar: React.FC = () => {
   return (

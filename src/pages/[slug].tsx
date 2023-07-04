@@ -1,13 +1,12 @@
-import type { NextPage, GetServerSidePropsContext } from "next";
-import requestIp from "request-ip";
-import geoip from "geoip-lite";
-import { Country, State } from "country-state-city";
 import { formatLink } from "~/components/general/atoms/formatLink";
-
+import { env } from "~/env.mjs";
+import { prisma } from "~/server/db";
+import { Country, State } from "country-state-city";
+import geoip from "geoip-lite";
+import type { GetServerSidePropsContext, NextPage } from "next";
 import Head from "next/head.js";
 import Image from "next/image";
-import { prisma } from "~/server/db";
-import { env } from "~/env.mjs";
+import requestIp from "request-ip";
 
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
   if (!context.params)

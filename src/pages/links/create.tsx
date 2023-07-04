@@ -1,9 +1,8 @@
-import type { NextPage } from "next";
-import useCookies from "~/lib/hooks/general/useCookies";
-
-import Cookies from "~/components/UI/widgets/Cookies";
 import PageLayout from "~/components/general/PageLayout";
 import LinkAdd from "~/components/Links/Add";
+import Cookies from "~/components/UI/widgets/Cookies";
+import useCookies from "~/lib/hooks/general/useCookies";
+import type { NextPage } from "next";
 
 const Home: NextPage = () => {
   const showCookies = useCookies();

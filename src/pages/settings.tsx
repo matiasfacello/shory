@@ -1,9 +1,9 @@
-import type { NextPage } from "next";
-import Router from "next/router";
-import { useSession } from "next-auth/react";
+import PageLayout from "~/components/general/PageLayout";
 import ChangeUsername from "~/components/User/ChangeUsername";
 import DeleteUser from "~/components/User/DeteleUser";
-import PageLayout from "~/components/general/PageLayout";
+import type { NextPage } from "next";
+import { useSession } from "next-auth/react";
+import Router from "next/router";
 
 const Settings: NextPage = () => {
   useSession({

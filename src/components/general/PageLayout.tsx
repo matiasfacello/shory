@@ -1,8 +1,7 @@
-import type { PropsWithChildren } from "react";
-import Head from "next/head";
-
-import Navbar from "~/components/UI/Navbar";
 import Footer from "~/components/UI/Footer";
+import Navbar from "~/components/UI/Navbar";
+import Head from "next/head";
+import type { PropsWithChildren } from "react";
 
 const PageLayout = (props: PropsWithChildren) => {
   return (

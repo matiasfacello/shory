@@ -1,13 +1,10 @@
-import { useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
-
+import Label from "~/components/Links/atom/Label";
+import UserSettingsBox from "~/components/User/atom/UserSettingsBox";
 import useUserNameChange from "~/lib/hooks/user/useUserNameChange";
 import useUserNameCheck from "~/lib/hooks/user/useUserNameCheck";
 import useUserNameCheckTime from "~/lib/hooks/user/useUserNameCheckTime";
-
-import Label from "~/components/Links/atom/Label";
-import UserSettingsBox from "~/components/User/atom/UserSettingsBox";
-
+import { useSession } from "next-auth/react";
+import { useEffect, useState } from "react";
 import type { FormEvent } from "react";
 
 interface UserNameChange {

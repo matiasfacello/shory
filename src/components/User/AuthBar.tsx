@@ -2,7 +2,7 @@ import { Icon } from "@iconify-icon/react";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
 // import useUserSubCheck from "~/lib/hooks/user/useUserSubCheck";
 

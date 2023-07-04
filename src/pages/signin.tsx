@@ -1,13 +1,13 @@
-import type { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
-import { getCsrfToken, getProviders, signIn } from "next-auth/react";
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "~/server/auth";
-import Head from "next/head";
 import { Icon } from "@iconify-icon/react";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
 import Logo from "~/components/UI/widgets/Logo";
+import { authOptions } from "~/server/auth";
+import type { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
+import { getServerSession } from "next-auth/next";
+import { getCsrfToken, getProviders, signIn } from "next-auth/react";
+import Head from "next/head";
 import Image from "next/image";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 
 export default function SignIn({ providers, csrfToken }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [showForm, setShowForm] = useState<boolean>(true);

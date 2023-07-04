@@ -1,6 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
-
 import type { CookiesType } from "cookies";
+import { useEffect, useMemo, useState } from "react";
 
 const useCookies = () => {
   const fillerCookies: CookiesType = useMemo(() => {

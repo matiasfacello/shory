@@ -1,5 +1,5 @@
-import Head from "next/head";
 import Logo from "~/components/UI/widgets/Logo";
+import Head from "next/head";
 
 export default function SignIn() {
   return (

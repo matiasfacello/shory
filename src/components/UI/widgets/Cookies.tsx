@@ -1,6 +1,5 @@
-import { useRouter } from "next/router";
-
 import type { CookiesType } from "cookies";
+import { useRouter } from "next/router";
 
 interface CookiesPopUpType {
   showCookies: boolean;
