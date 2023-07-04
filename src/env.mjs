@@ -28,10 +28,13 @@ const server = z.object({
  * This way you can ensure the app isn't built with invalid env vars.
  * To expose them to the client, prefix them with `NEXT_PUBLIC_`.
  */
-const client = z.object({
-  // NEXT_PUBLIC_CLIENTVAR: z.string().min(1),
-  NEXT_PUBLIC_HOST: z.string().url(),
-});
+const client = z.object(
+  /** @satisfies {Record<`NEXT_PUBLIC_${string}`, import('zod').ZodType>} */ (
+    {
+      // NEXT_PUBLIC_CLIENTVAR: z.string().min(1),
+    }
+  )
+);
 
 /**
  * You can't destruct `process.env` as a regular object in the Next.js
